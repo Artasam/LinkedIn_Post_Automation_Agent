@@ -1,0 +1,15 @@
+# Core LLM & Agent Framework
+langchain
+langchain-groq
+langgraph
+groq
+
+# HTTP & RSS
+requests
+feedparser
+
+# Environment management
+python-dotenv
+
+Pillow
+

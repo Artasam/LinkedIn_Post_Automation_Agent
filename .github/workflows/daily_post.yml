@@ -1,0 +1,158 @@
+# .github/workflows/daily_post.yml
+# ---------------------------------
+# Runs every day at 09:00 UTC and publishes a unique AI LinkedIn post.
+# Can also be triggered manually from the Actions tab.
+#
+# REQUIRED SECRETS (Settings → Secrets and variables → Actions):
+#   GROQ_API_KEY           — from https://console.groq.com
+#   LINKEDIN_ACCESS_TOKEN  — from https://linkedin.com/developers (expires 60 days)
+#   LINKEDIN_PERSON_ID     — your LinkedIn profile ID (sub field from /v2/userinfo)
+#
+# OPTIONAL SECRETS:
+#   PEXELS_API_KEY         — free at https://www.pexels.com/api/
+#   UNSPLASH_ACCESS_KEY    — free at https://unsplash.com/developers
+#   NEWS_API_KEY           — free at https://newsapi.org (100 req/day)
+
+name: "Daily LinkedIn AI Post"
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # Every day at 09:00 UTC (14:00 PKT)
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run — generate post but do NOT publish to LinkedIn"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+concurrency:
+  group: linkedin-daily-post
+  cancel-in-progress: false
+
+jobs:
+  post-to-linkedin:
+    name: "Generate & Publish AI Post"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      # ── 2. Python setup ──────────────────────────────────────────────────────
+      - name: "Set up Python 3.13"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      # ── 3. Install dependencies ──────────────────────────────────────────────
+      - name: "Install dependencies"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # ── 4. Verify required secrets ───────────────────────────────────────────
+      - name: "Verify required secrets"
+        env:
+          _GROQ:     ${{ secrets.GROQ_API_KEY }}
+          _LI_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          _LI_ID:    ${{ secrets.LINKEDIN_PERSON_ID }}
+        run: |
+          MISSING=""
+          [ -z "$_GROQ" ]     && MISSING="$MISSING GROQ_API_KEY"
+          [ -z "$_LI_TOKEN" ] && MISSING="$MISSING LINKEDIN_ACCESS_TOKEN"
+          [ -z "$_LI_ID" ]    && MISSING="$MISSING LINKEDIN_PERSON_ID"
+          if [ -n "$MISSING" ]; then
+            echo "ERROR: Missing required secrets:$MISSING"
+            echo "Add them at: Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+          echo "All required secrets present."
+
+      # ── 5. Smoke-test imports ────────────────────────────────────────────────
+      - name: "Smoke-test Python imports"
+        run: |
+          python -c "
+          import langchain, langchain_groq, langgraph, groq
+          import requests, dotenv
+          from langchain_core.messages import HumanMessage, SystemMessage
+          from langgraph.graph import StateGraph, END
+          from tools.news_tool    import fetch_all_news
+          from tools.history_tool import load_history, record_post
+          from tools.image_tool   import generate_image
+          print('All imports OK')
+          "
+
+      # ── 6. Run the agent ─────────────────────────────────────────────────────
+      - name: "Run LinkedIn AI Agent"
+        env:
+          # Required
+          GROQ_API_KEY:          ${{ secrets.GROQ_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PERSON_ID:    ${{ secrets.LINKEDIN_PERSON_ID }}
+
+          # Image generation — free APIs (SVG fallback always active)
+          PEXELS_API_KEY:        ${{ secrets.PEXELS_API_KEY }}
+          UNSPLASH_ACCESS_KEY:   ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          ENABLE_IMAGE_GENERATION: "true"
+
+          # News sources
+          NEWS_API_KEY:          ${{ secrets.NEWS_API_KEY }}
+
+          # LLM settings
+          GROQ_MODEL:            "llama-3.3-70b-versatile"
+          GROQ_TEMPERATURE:      "0.7"
+          GROQ_MAX_TOKENS:       "700"
+          MULTI_TOPIC_DRAFTS:    "1"
+
+          # News fetch
+          RSS_MAX_ARTICLES_PER_FEED: "8"
+          TOPIC_CANDIDATE_COUNT: "5"
+
+          # Logging
+          LOG_LEVEL:    "INFO"
+          LOG_TO_FILE:  "false"
+
+        run: |
+          DRY_RUN_FLAG=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            DRY_RUN_FLAG="--dry-run"
+            echo "DRY RUN MODE — post will NOT be published"
+          fi
+          python main.py $DRY_RUN_FLAG
+
+      # ── 7. Persist post history ──────────────────────────────────────────────
+      # Commits post_history.json back to repo so deduplication
+      # system remembers past topics across stateless GitHub runners.
+      - name: "Persist post history"
+        if: success()
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add post_history.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "chore: update post history [skip ci]"
+          git push || true
+
+      # ── 8. Job summary ───────────────────────────────────────────────────────
+      - name: "Write job summary"
+        if: always()
+        run: |
+          echo "## LinkedIn AI Agent — Run Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Status**   | \`${{ job.status }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Trigger**  | \`${{ github.event_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Dry run**  | \`${{ github.event.inputs.dry_run || 'false' }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Run time** | \`$(date -u '+%Y-%m-%d %H:%M UTC')\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Runner**   | \`${{ runner.os }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Model**    | \`llama-3.3-70b-versatile\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Images**   | \`Pexels → Unsplash → SVG\` |" >> $GITHUB_STEP_SUMMARY

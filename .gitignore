@@ -1,0 +1,170 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# .gitignore — LinkedIn AI Content Automation Agent
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ─── Credentials & Secrets ────────────────────────────────────────────────────
+# NEVER commit API keys or tokens to version control.
+# Use .env.example as the template — copy it to .env and fill in your values.
+.env
+.env.local
+.env.*.local
+*.env
+
+# ─── Python Runtime ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyw
+.Python
+*.pyc
+
+# ─── Python Packaging ─────────────────────────────────────────────────────────
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+wheels/
+*.whl
+MANIFEST
+pip-wheel-metadata/
+share/python-wheels/
+
+# ─── Virtual Environments ─────────────────────────────────────────────────────
+# Common venv directory names — add yours if different
+venv/
+env/
+.venv/
+.env/
+LA/
+ENV/
+venv.bak/
+.virtualenv/
+
+# ─── Logs ─────────────────────────────────────────────────────────────────────
+logs/
+*.log
+*.log.*
+log.txt
+agent.log
+
+# ─── Post History ─────────────────────────────────────────────────────────────
+# !! DO NOT IGNORE THIS FILE !!
+# post_history.json tracks the last 30 published topics.
+# Committing it to the repo lets GitHub Actions remember past posts
+# across stateless runner sessions, preventing topic repetition.
+#
+# To persist history in GitHub Actions, add this step to daily_post.yml:
+#   - name: "Commit post history"
+#     run: |
+#       git config user.name "github-actions[bot]"
+#       git config user.email "github-actions[bot]@users.noreply.github.com"
+#       git add post_history.json
+#       git diff --staged --quiet || git commit -m "Update post history [skip ci]"
+#       git push
+#
+# post_history.json   ← INTENTIONALLY NOT IGNORED — keep and commit this file
+
+# ─── Generated Images (Stability AI temp files) ───────────────────────────────
+# Stability AI image generation saves temporary PNGs to the system temp folder.
+# If any images accidentally land in the project directory, ignore them.
+# The temp files in AppData/Temp are auto-cleaned by the OS.
+images/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+# Exception: keep any images in docs/ or assets/ if you add them intentionally
+!docs/**/*.png
+!docs/**/*.jpg
+!assets/**/*.png
+!assets/**/*.jpg
+
+# ─── IDE & Editor ─────────────────────────────────────────────────────────────
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim / Emacs
+*.swp
+*.swo
+*~
+\#*\#
+.#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ─── Operating System ─────────────────────────────────────────────────────────
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+
+# ─── Testing & Coverage ───────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+nosetests.xml
+test-results/
+junit.xml
+
+# ─── Type Checking ────────────────────────────────────────────────────────────
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+.pyre/
+
+# ─── Jupyter Notebooks ────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ─── Documentation Build ──────────────────────────────────────────────────────
+docs/_build/
+docs/build/
+site/
+.mkdocs/
+
+# ─── Dependency Lock Files (optional — uncomment if you pin versions) ─────────
+# poetry.lock
+# Pipfile.lock
+
+# ─── Misc ─────────────────────────────────────────────────────────────────────
+*.bak
+*.tmp
+*.temp
+*.orig
+*.rej
+.cache/
+tmp/
+temp/
