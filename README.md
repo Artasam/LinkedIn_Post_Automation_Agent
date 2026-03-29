@@ -48,7 +48,7 @@ This project is a **production-ready multi-agent AI system** that runs fully on 
 7. Adds **3–5** contextual AI hashtags
 8. Attaches a **professional image** via Pexels → Unsplash → SVG fallback
 9. Publishes to LinkedIn via the official **API v2**
-10. Runs automatically every day at **09:00 UTC** via GitHub Actions
+10. Runs automatically every Monday–Friday at **peak engagement hours** via GitHub Actions
 
 ---
 
@@ -103,9 +103,9 @@ This project is a **production-ready multi-agent AI system** that runs fully on 
                         │  • Model: llama-3.3-70b     │
                         │  • Temp: 0.8 (boosted)      │
                         │  • Max tokens: 700          │
-                        │  • Min words: 130           │
+                        │  • Min words: 80            │
                         │  • Max words: 300           │
-                        │  • Auto-retry if < 100 wds  │
+                        │  • Auto-retry if < 60 wds   │
                         └─────────────┬───────────────┘
                                       │
                         ┌─────────────▼─────────────┐
@@ -201,7 +201,20 @@ The topic selection prompt explicitly requires:
 
 ### 4. Daily Rotating Fallbacks
 
-10 pre-written high-quality fallback topics, selected by `day_of_year % 10`. Each fallback also checks history — cycles to the next one if recently used.
+10 pre-written high-quality fallback topics, specifically focused on practitioner insights, selected by `day_of_year % 10`. Each fallback also checks history — cycles to the next one if recently used.
+
+---
+
+## LinkedIn Algorithm Optimization
+
+### 1. Rotating Post Formats (`agents/content_agent.py`)
+To prevent audience fatigue, the agent rotates through 7 different post formats based on the day of the week (e.g., Hot Take on Monday, Breakdown on Tuesday, Myth Buster on Thursday).
+
+### 2. Practitioner Focus (`agents/topic_agent.py`)
+Topics are explicitly rewritten by the LLM prior to drafting. It restructures dry academic paper titles into practitioner-oriented insights that engineers and leaders actually care about.
+
+### 3. Readability & Engagement Formatting
+Posts are penalized for writing heavy blocks of text. The agent is forced to use hard carriage returns and blank lines for algorithmic readability, avoiding "banned" repetitive corporate buzzwords like *Revolutionizing*, *Leverage*, or *Game-changing*.
 
 ---
 
@@ -363,7 +376,7 @@ python main.py
 | Agent | Temperature | Max Tokens | Purpose |
 |-------|-------------|------------|---------|
 | Topic Agent | 0.5 | 600 | Select 5 varied topics |
-| Content Agent | 0.8 | 700 | Write LinkedIn post (130–300 words) |
+| Content Agent | 0.8 | 700 | Write LinkedIn post (80–300 words) |
 | Safety Tool (Tier 2) | — | 400 | LLM moderation check |
 | Hashtag Agent | 0.4 | 256 | Generate 3–5 hashtags |
 
@@ -469,7 +482,11 @@ permissions:
 
 ```yaml
 schedule:
-  - cron: "0 9 * * *"    # Every day 09:00 UTC = 14:00 PKT
+  - cron: "0 3 * * 1"   # Monday    09:00 AM PKT
+  - cron: "0 4 * * 2"   # Tuesday   09:00 AM PKT (highest engagement)
+  - cron: "0 4 * * 3"   # Wednesday 09:00 AM PKT (highest engagement)
+  - cron: "0 4 * * 4"   # Thursday  09:00 AM PKT
+  - cron: "0 5 * * 5"   # Friday    10:00 AM PKT
 ```
 
 ---
@@ -485,7 +502,7 @@ LINKEDIN_PERSON_ID=
 # ── LLM ──────────────────────────────────────────────────────────────────────
 GROQ_MODEL=llama-3.3-70b-versatile
 GROQ_TEMPERATURE=0.7
-GROQ_MAX_TOKENS=700          # Content agent needs 700 for full 130-300 word posts
+GROQ_MAX_TOKENS=700          # Content agent needs 700 for full 80-300 word posts
 
 # ── NEWS SOURCES ─────────────────────────────────────────────────────────────
 RSS_MAX_ARTICLES_PER_FEED=8  # Max articles per source (8 sources × 8 = 64 max)
@@ -597,7 +614,7 @@ Reset post history:
 del post_history.json
 ```
 
-### Post is too short (under 100 words)
+### Post is too short (under 60 words)
 
 The agent auto-retries once with a stricter prompt. If still short, increase token budget:
 ```env
@@ -666,8 +683,7 @@ graph.add_conditional_edges(
 ```yaml
 # .github/workflows/daily_post.yml
 schedule:
-  - cron: "0 4 * * 1-5"   # 9:00 AM PKT weekdays (highest engagement)
-  - cron: "0 9 * * *"      # 2:00 PM PKT daily (current)
+  - cron: "0 10 * * 1"   # Update individual day cron times
 ```
 
 ---
