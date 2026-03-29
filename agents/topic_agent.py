@@ -1,16 +1,12 @@
 """
 agents/topic_agent.py
 ---------------------
-Topic Agent: Fetches trending AI topics from multiple reliable sources
-(ArXiv, HackerNews, GitHub, NewsAPI, Wikipedia, DuckDuckGo), ranks them
-by relevance and recency, filters out recently-published topics using
-post history, then uses the Groq LLM to select the best candidate.
+Topic Agent: Fetches trending AI topics from 6 sources, ranks by
+relevance, filters history, and uses LLM to select LinkedIn-optimised
+topics — preferring practitioner-relevant over pure academic content.
 
-Key anti-repetition features:
-  - Post history filter (history_tool.py) skips recently used topics
-  - Weighted random selection adds variety even among top-ranked topics
-  - Daily rotating fallback topics (10 unique topics, day-based rotation)
-  - LLM instructed to prefer novel/specific research over generic AI topics
+Key improvement: topics are translated from academic paper titles into
+LinkedIn-friendly angles before passing to the content agent.
 """
 
 import logging
@@ -36,119 +32,118 @@ HIGH_VALUE_KEYWORDS = [
     "deepmind", "openai", "anthropic", "mistral", "hugging",
     "diffusion", "embedding", "inference", "quantization", "lora",
     "chain-of-thought", "vision", "speech", "agentic", "rlhf",
+    "code", "programming", "developer", "api", "deployment",
 ]
 
-# ─── 10 Rotating Fallback Topics ──────────────────────────────────────────────
+# ─── 10 Rotating Fallback Topics (practitioner-focused) ───────────────────────
 FALLBACK_TOPICS = [
     {
-        "title": "How Agentic AI Is Reshaping Enterprise Workflows in 2025",
+        "title": "Why RAG Is Replacing Fine-Tuning for Most Enterprise AI Teams",
         "summary": (
-            "AI agents that can plan, use tools, and execute multi-step tasks "
-            "are moving from research demos into production enterprise systems. "
-            "Companies are deploying agents for code review, data analysis, "
-            "and customer support automation."
+            "Enterprise AI teams are abandoning fine-tuning in favour of "
+            "retrieval-augmented generation. The economics are compelling: "
+            "RAG updates in hours, costs 90% less, and outperforms fine-tuned "
+            "models on domain knowledge tasks. Vector databases like Pinecone "
+            "and pgvector are now standard infrastructure."
         ),
         "source": "AI Engineering Community",
     },
     {
-        "title": "The Rise of Small Language Models: Efficiency Over Scale",
+        "title": "The Real Reason Most LLM Production Deployments Fail",
         "summary": (
-            "Researchers are finding that smaller, fine-tuned models often "
-            "outperform giant general-purpose LLMs on specific tasks. "
-            "Models under 10B parameters are becoming the go-to choice for "
-            "edge deployment and cost-sensitive applications."
+            "80% of LLM pilots never reach production. The culprit is rarely "
+            "the model — it's evaluation frameworks, latency budgets, and "
+            "hallucination rates that teams discover too late. Building "
+            "proper evals before deployment is the new non-negotiable."
         ),
-        "source": "Machine Learning Research",
+        "source": "MLOps Practitioners",
     },
     {
-        "title": "Retrieval-Augmented Generation Is Now the Industry Standard",
+        "title": "Llama 3 vs GPT-4: What the Benchmarks Don't Tell You",
         "summary": (
-            "RAG has become the default architecture for enterprise AI applications, "
-            "allowing LLMs to access up-to-date domain-specific knowledge without "
-            "expensive retraining. Vector databases and hybrid search are now "
-            "central to modern AI stacks."
-        ),
-        "source": "AI Engineering Weekly",
-    },
-    {
-        "title": "Open-Source LLMs Are Closing the Gap with Proprietary Models",
-        "summary": (
-            "Models like Llama 3, Mistral, and Qwen are benchmarking within "
-            "striking distance of GPT-4 class models on reasoning tasks. "
-            "The gap between open and closed models is narrowing faster "
-            "than the industry predicted."
+            "Benchmark scores mislead practitioners. Llama 3 70B outperforms "
+            "GPT-4 on coding tasks, matches it on reasoning, but struggles "
+            "with multi-turn instruction following. The model choice depends "
+            "on your specific task, not general leaderboard rankings."
         ),
         "source": "Open Source AI Community",
     },
     {
-        "title": "Multimodal AI: When Models Can See, Hear, and Reason Together",
+        "title": "AI Agents Are Breaking in Production — Here's Why",
         "summary": (
-            "The latest generation of AI models natively processes text, images, "
-            "audio, and video in a single unified architecture. This unlocks "
-            "powerful applications in healthcare imaging, document processing, "
-            "and real-time video understanding."
+            "Agentic AI systems fail in production for predictable reasons: "
+            "tool call loops, context window exhaustion, and inability to "
+            "recover from partial failures. Teams building reliable agents "
+            "need structured state management, not just bigger context windows."
         ),
-        "source": "AI Technology Review",
+        "source": "AI Engineering Weekly",
     },
     {
-        "title": "AI Safety and Alignment: Why It Matters More Than Ever",
+        "title": "The Hidden Cost of Running LLMs That Nobody Talks About",
         "summary": (
-            "As AI systems become more capable and agentic, ensuring they behave "
-            "predictably and align with human values is a critical research priority. "
-            "Techniques like RLHF, Constitutional AI, and interpretability are "
-            "at the forefront of this work."
+            "API costs are the visible cost. Hidden costs include: prompt "
+            "engineering time (50+ hours per use case), evaluation pipelines, "
+            "output validation, and the 3am incident when the model starts "
+            "hallucinating in production. Total AI cost is 3-5x the API bill."
+        ),
+        "source": "AI Cost Analysis Report",
+    },
+    {
+        "title": "Why AI Safety Research Finally Matters to Practitioners",
+        "summary": (
+            "AI safety is no longer just philosophy. RLHF, Constitutional AI, "
+            "and interpretability tools are now standard parts of model "
+            "training pipelines. Teams ignoring alignment are shipping models "
+            "that behave unpredictably in edge cases — with real consequences."
         ),
         "source": "AI Safety Research",
     },
     {
-        "title": "The Prompt Engineering Era Is Ending — Fine-Tuning Takes Over",
+        "title": "The Prompt Engineering Era Is Over — What Comes Next",
         "summary": (
-            "As foundation models mature, organizations are moving beyond "
-            "prompt engineering toward fine-tuning on proprietary datasets. "
-            "This shift creates a new competitive moat: unique training data, "
-            "not just clever prompts."
+            "Prompt engineering is table stakes now. The teams winning in 2025 "
+            "are those with proprietary fine-tuned models, unique datasets, "
+            "and systematic evaluation pipelines. The competitive moat has "
+            "shifted from clever prompts to data and evaluation infrastructure."
         ),
-        "source": "AI Engineering Insights",
+        "source": "AI Strategy Insights",
     },
     {
-        "title": "LLMs in Production: Lessons from Real-World Deployments",
+        "title": "AI Code Assistants Changed My Team's Workflow — Not How You Think",
         "summary": (
-            "Engineering teams deploying LLMs at scale are learning hard lessons "
-            "about latency, cost, hallucination rates, and monitoring. "
-            "Observability tools and evaluation frameworks are now essential "
-            "parts of the modern ML stack."
+            "GitHub Copilot and Cursor increased velocity by 40%, but changed "
+            "the role of senior engineers. They now spend more time on "
+            "architecture, code review, and AI output validation — less on "
+            "implementation. Junior engineers are writing more code than ever."
         ),
-        "source": "MLOps Community",
+        "source": "Developer Productivity Research",
     },
     {
-        "title": "AI Coding Assistants Are Changing How Software Gets Built",
+        "title": "The Vector Database Landscape in 2025: What Actually Works",
         "summary": (
-            "Tools like GitHub Copilot, Cursor, and Claude Code are dramatically "
-            "accelerating developer productivity. Studies show developers complete "
-            "tasks 55% faster on average, fundamentally shifting the engineering role."
+            "Pinecone, Weaviate, Qdrant, and pgvector each have real tradeoffs "
+            "that benchmarks hide. Pinecone wins on managed simplicity, "
+            "pgvector wins on existing PostgreSQL stacks, Qdrant wins on "
+            "self-hosted performance. The right choice depends on your query patterns."
         ),
-        "source": "Developer Technology News",
+        "source": "Database Engineering Community",
     },
     {
-        "title": "Vector Databases: The Unsung Heroes of the Modern AI Stack",
+        "title": "Multimodal AI Is Changing What 'Senior AI Engineer' Means",
         "summary": (
-            "As RAG-based applications proliferate, vector databases like Pinecone, "
-            "Weaviate, and pgvector are becoming critical infrastructure. Efficiently "
-            "storing and retrieving semantic embeddings at scale is now a core "
-            "engineering competency."
+            "GPT-4V, Gemini 1.5, and Claude 3 process images, audio, and "
+            "video natively. This unlocks document processing, quality control, "
+            "and medical imaging use cases that weren't viable 18 months ago. "
+            "AI engineers who only know text models are already behind."
         ),
-        "source": "Data Engineering Weekly",
+        "source": "AI Technology Review",
     },
 ]
 
 
 def _relevance_score(article: dict) -> float:
-    """
-    Score an article 0–1 for AI relevance:
-      50% keyword density, 30% recency, 20% source authority.
-    """
+    """Score article for AI relevance: 50% keyword, 30% recency, 20% source weight."""
     text = (article.get("title", "") + " " + article.get("summary", "")).lower()
-
     hits = sum(1 for kw in HIGH_VALUE_KEYWORDS if kw in text)
     keyword_score = min(hits / 6, 1.0)
 
@@ -170,51 +165,32 @@ def rank_articles(articles: list) -> list:
     for article in articles:
         article["relevance_score"] = _relevance_score(article)
     ranked = sorted(articles, key=lambda a: a["relevance_score"], reverse=True)
-
     logger.info("Top 3 articles after ranking:")
     for i, a in enumerate(ranked[:3]):
         logger.info(
             "  #%d [score %.3f] [%s] %s",
-            i + 1,
-            a["relevance_score"],
-            a.get("source", "?"),
-            a["title"][:80],
+            i + 1, a["relevance_score"],
+            a.get("source", "?"), a["title"][:80],
         )
     return ranked
 
 
-def _weighted_random_pick(articles: list, pool_size: int = 10) -> list:
-    """
-    Instead of always picking the top-N articles in strict order,
-    use weighted random sampling from the top pool_size articles.
-
-    This ensures variety: even if ArXiv paper #1 is always top-ranked,
-    the agent may pick #2, #3, or #4 instead on different runs.
-
-    Weight = relevance_score^2 (emphasises high scores but allows lower ones).
-    """
+def _weighted_random_pick(articles: list, pool_size: int = 12) -> list:
+    """Weighted random sample from top pool — prevents always picking #1."""
     pool = articles[:pool_size]
     if len(pool) <= 1:
         return pool
-
     weights = [max(a.get("relevance_score", 0.1) ** 2, 0.01) for a in pool]
-
-    # Sample without replacement — pick min(pool_size, 15) diverse candidates
     sample_size = min(len(pool), 15)
     try:
         sampled = random.choices(pool, weights=weights, k=sample_size)
-        # Deduplicate while preserving order
-        seen = set()
-        unique = []
+        seen, unique = set(), []
         for a in sampled:
             key = a["title"][:60]
             if key not in seen:
                 seen.add(key)
                 unique.append(a)
-        logger.info(
-            "Weighted random selection: picked %d diverse candidates from top %d.",
-            len(unique), len(pool)
-        )
+        logger.info("Weighted random: picked %d diverse candidates from top %d.", len(unique), len(pool))
         return unique
     except Exception:
         return pool
@@ -222,8 +198,10 @@ def _weighted_random_pick(articles: list, pool_size: int = 10) -> list:
 
 def select_topics_with_llm(articles: list, n: int = 3) -> list:
     """
-    Use Groq LLM to pick the N most compelling and LinkedIn-worthy topics.
-    Instructs the LLM to prefer novel and specific topics over generic AI content.
+    Use Groq LLM to select and REFRAME the N best topics for LinkedIn.
+
+    Key improvement: LLM translates academic paper titles into
+    practitioner-friendly angles that resonate with LinkedIn audience.
     """
     if not articles:
         return []
@@ -236,32 +214,34 @@ def select_topics_with_llm(articles: list, n: int = 3) -> list:
     llm = ChatGroq(
         api_key=settings.GROQ_API_KEY,
         model=settings.GROQ_MODEL,
-        temperature=0.5,   # slightly higher → more variety in topic selection
-        max_tokens=600,
+        temperature=0.5,
+        max_tokens=700,
     )
 
     messages = [
         SystemMessage(content=(
-            "You are an expert AI researcher and LinkedIn content strategist. "
-            "Select the most compelling, timely, and professionally relevant AI topics "
-            "for a LinkedIn audience of engineers, researchers, and business leaders. "
-            "\n\nPriority rules:\n"
-            "1. Prefer SPECIFIC research findings over generic AI discussions\n"
-            "2. Prefer topics with concrete numbers, benchmarks, or named models\n"
-            "3. AVOID selecting topics that sound generic like 'AI trends' or 'future of AI'\n"
-            "4. Each selected topic must be DISTINCTLY different from the others"
+            "You are a LinkedIn content strategist for a senior AI engineer "
+            "with 50,000 followers. Your audience is AI practitioners, engineers, "
+            "and technical leads — NOT executives or academics.\n\n"
+            "When selecting topics:\n"
+            "1. Translate academic titles into practitioner-relevant angles\n"
+            "2. Prefer topics with real-world impact over theoretical research\n"
+            "3. Avoid topics that are too niche or too academic\n"
+            "4. Each topic must be distinctly different from the others\n"
+            "5. Reframe the title as a LinkedIn-friendly hook, not a paper title"
         )),
         HumanMessage(content=(
-            f"Select the {n} most compelling, varied topics from this list.\n"
-            f"Choose topics that would generate strong LinkedIn engagement.\n\n"
-            f"For each return EXACTLY:\n"
-            f"TOPIC: <compelling LinkedIn-friendly title>\n"
-            f"SUMMARY: <2-3 sentences with specific details>\n"
+            f"From these AI articles, select the {n} most compelling topics "
+            f"for a LinkedIn post aimed at senior AI practitioners.\n\n"
+            f"For each, return EXACTLY:\n"
+            f"TOPIC: <LinkedIn-friendly title — not the paper title>\n"
+            f"SUMMARY: <2-3 sentences explaining the practitioner impact>\n"
             f"SOURCE: <source name>\n\n"
             f"Articles:\n{catalogue}\n\n"
-            f"IMPORTANT: Make sure the {n} topics are distinctly different "
-            f"from each other — no two should cover the same concept.\n"
-            f"Return ONLY the {n} topics in the format above."
+            f"CRITICAL: Rewrite academic titles as practitioner insights.\n"
+            f"Example: 'EndoCoT: Scaling Endogenous Chain-of-Thought' → "
+            f"'Why Diffusion Models Are Getting Better at Reasoning'\n\n"
+            f"Return ONLY the {n} topics in the exact format above."
         )),
     ]
 
@@ -290,77 +270,49 @@ def select_topics_with_llm(articles: list, n: int = 3) -> list:
             selected.append({"title": topic, "summary": summary, "source": source})
 
     if not selected:
-        logger.warning("LLM returned unparseable response — using top ranked articles.")
+        logger.warning("LLM returned unparseable response — using raw articles.")
         selected = [
             {"title": a["title"], "summary": a["summary"], "source": a["source"]}
             for a in articles[:n]
         ]
 
-    logger.info("LLM selected %d topic(s).", len(selected))
+    logger.info("LLM selected and reframed %d topic(s).", len(selected))
     return selected
 
 
 def _get_fallback_topic() -> dict:
-    """
-    Return a daily rotating fallback topic based on day-of-year.
-    Also checks history so even fallbacks don't repeat.
-    """
+    """Rotating fallback: practitioner-focused, checks history before returning."""
     day_index = datetime.now().timetuple().tm_yday % len(FALLBACK_TOPICS)
-
-    # Try day_index first, then cycle through if that was recently used
     for offset in range(len(FALLBACK_TOPICS)):
         idx = (day_index + offset) % len(FALLBACK_TOPICS)
         topic = FALLBACK_TOPICS[idx]
-        from tools.history_tool import was_used_recently
-        if not was_used_recently(topic["title"]):
-            logger.info(
-                "Using fallback topic #%d: '%s'", idx + 1, topic["title"]
-            )
+        from tools.history_tool import was_used_recently, load_history
+        if not was_used_recently(topic["title"], history=load_history()):
+            logger.info("Using fallback topic #%d: '%s'", idx + 1, topic["title"])
             return topic
-
-    # All fallbacks were used recently — just use today's index anyway
-    topic = FALLBACK_TOPICS[day_index]
-    logger.warning("All fallback topics recently used — reusing today's fallback.")
-    return topic
+    return FALLBACK_TOPICS[day_index]
 
 
 def run_topic_agent() -> list:
     """
     Entry point for the Topic Agent.
-
-    Flow:
-      1. Log current post history summary
-      2. Fetch from all 6 news sources
-      3. Score articles by keyword density + recency + source authority
-      4. Filter out recently-published topics (history_tool)
-      5. Weighted random sampling from top pool (prevents same #1 every time)
-      6. LLM picks the top N most compelling, varied topics
-      7. If ALL sources fail → use daily rotating fallback topic
-
-    Returns:
-        List of selected topic dicts (title, summary, source).
+    Returns list of LinkedIn-reframed topic dicts.
     """
-    # Show history so we know what was published recently
     logger.info("Post History:\n%s", get_history_summary())
-
     logger.info("Topic Agent: Fetching from multi-source news tool…")
+
     articles = fetch_all_news(max_per_source=settings.RSS_MAX_ARTICLES_PER_FEED)
 
     if not articles:
-        logger.warning(
-            "All news sources returned 0 articles. "
-            "Using daily rotating fallback topic."
-        )
+        logger.warning("All news sources returned 0 articles — using fallback.")
         return [_get_fallback_topic()]
 
     logger.info("Ranking %d total articles by AI relevance…", len(articles))
     ranked = rank_articles(articles)
 
-    # Filter out recently used topics
-    fresh_articles = filter_fresh_topics(ranked)
-    logger.info("%d fresh (unused) articles available.", len(fresh_articles))
+    fresh = filter_fresh_topics(ranked)
+    logger.info("%d fresh (unused) articles available.", len(fresh))
 
-    # Weighted random sampling for variety — prevents always picking #1
-    diverse_candidates = _weighted_random_pick(fresh_articles, pool_size=12)
+    diverse = _weighted_random_pick(fresh, pool_size=12)
 
-    return select_topics_with_llm(diverse_candidates, n=settings.TOPIC_CANDIDATE_COUNT)
+    return select_topics_with_llm(diverse, n=settings.TOPIC_CANDIDATE_COUNT)

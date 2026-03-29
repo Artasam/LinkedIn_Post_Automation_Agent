@@ -17,7 +17,16 @@ name: "Daily LinkedIn AI Post"
 
 on:
   schedule:
-    - cron: "0 9 * * *"   # Every day at 09:00 UTC (14:00 PKT)
+    # Best times for AI/tech LinkedIn audience (research-backed):
+    # Tue/Wed/Thu 9:00 AM PKT = 04:00 UTC (peak engagement window)
+    # Monday at 8:00 AM PKT = 03:00 UTC (week-start momentum)
+    # Friday at 10:00 AM PKT = 05:00 UTC (end-of-week reflection)
+    # Saturday/Sunday: skip (lower professional engagement)
+    - cron: "0 3 * * 1"   # Monday    09:00 AM PKT
+    - cron: "0 4 * * 2"   # Tuesday   09:00 AM PKT  (highest engagement)
+    - cron: "0 4 * * 3"   # Wednesday 09:00 AM PKT  (highest engagement)
+    - cron: "0 4 * * 4"   # Thursday  09:00 AM PKT
+    - cron: "0 5 * * 5"   # Friday    10:00 AM PKT
 
   workflow_dispatch:
     inputs:

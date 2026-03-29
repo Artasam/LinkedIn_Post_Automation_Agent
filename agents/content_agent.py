@@ -1,18 +1,24 @@
 """
 agents/content_agent.py
 -----------------------
-Content Agent: Generates a professional, high-quality LinkedIn post
-using Groq LLM (llama-3.3-70b-versatile).
+Content Agent: Generates LinkedIn posts optimised for the LinkedIn
+algorithm and maximum human engagement.
 
-Quality issues fixed:
-  - Posts were too short (67 words) → now enforces minimum 120 words
-  - Paragraphs weren't separated → now enforces blank lines between paragraphs
-  - First line hook wasn't strong → now uses stronger hook instructions
-  - Score was 34.6/100 → target score 70+
+Key design decisions based on LinkedIn algorithm research (2025):
+  - DWELL TIME wins: short paragraphs, one idea per line, white space
+  - COMMENTS > LIKES: divisive, specific questions beat generic ones
+  - PERSONAL POV beats news summary: expert insight framing
+  - SPECIFIC beats VAGUE: numbers, model names, percentages
+  - FORMAT matters: every line break increases readability score
+  - 5 rotating formats prevent audience fatigue
+  - No promotional CTAs (flagged as spam by safety tools)
+  - No "Revolutionizing", "Game-changing", "X% of..." openers
 """
 
 import logging
+import random
 import re
+from datetime import date
 
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -21,92 +27,250 @@ from config import settings
 
 logger = logging.getLogger(__name__)
 
+
+# ─── Post Format Rotation ─────────────────────────────────────────────────────
+# 5 formats rotate daily by day-of-week to prevent repetition.
+# Research shows varied formats increase follower retention by 40%.
+
+POST_FORMATS = {
+    0: {  # Monday — HOT TAKE
+        "name": "Hot Take",
+        "instruction": (
+            "Write a bold, contrarian opinion about this AI topic that will spark debate.\n"
+            "Format:\n"
+            "• Line 1: Controversial statement that will divide readers (no '%, no 'Revolutionizing')\n"
+            "• Line 2: BLANK LINE\n"
+            "• Lines 3-4: Why most people are wrong about this\n"
+            "• Line 5: BLANK LINE\n"
+            "• Lines 6-7: The nuanced reality that few people talk about\n"
+            "• Line 8: BLANK LINE\n"
+            "• Line 9: One specific insight practitioners can use\n"
+            "• Line 10: BLANK LINE\n"
+            "• Line 11: A divisive question that forces a YES or NO answer\n\n"
+            "Style: Direct, confident, slightly provocative. No hedging."
+        ),
+    },
+    1: {  # Tuesday — BREAKDOWN
+        "name": "Breakdown",
+        "instruction": (
+            "Write a crisp breakdown of what this AI development actually means in practice.\n"
+            "Format:\n"
+            "• Line 1: Specific fact or number from the topic (concrete, not vague)\n"
+            "• Line 2: BLANK LINE\n"
+            "• Line 3: What this means for AI engineers (specific job impact)\n"
+            "• Line 4: BLANK LINE\n"
+            "• Line 5: What this means for businesses (specific ROI angle)\n"
+            "• Line 6: BLANK LINE\n"
+            "• Line 7: The one thing most people will miss about this\n"
+            "• Line 8: BLANK LINE\n"
+            "• Line 9: A question that invites people to share their experience\n\n"
+            "Style: Analytical, expert, punchy. Each line is its own paragraph."
+        ),
+    },
+    2: {  # Wednesday — LESSON LEARNED (highest engagement day)
+        "name": "Lesson",
+        "instruction": (
+            "Write as an AI practitioner sharing a genuine insight from this topic.\n"
+            "Use first person sparingly — write as a senior engineer sharing wisdom.\n"
+            "Format:\n"
+            "• Line 1: A surprising or counterintuitive insight (NOT starting with 'I')\n"
+            "• Line 2: BLANK LINE\n"
+            "• Lines 3-4: Context — why this matters right now\n"
+            "• Line 5: BLANK LINE\n"
+            "• Lines 6-7: The deeper lesson or pattern this reveals\n"
+            "• Line 8: BLANK LINE\n"
+            "• Line 9: One concrete action or observation\n"
+            "• Line 10: BLANK LINE\n"
+            "• Line 11: A reflective question about their own experience\n\n"
+            "Style: Thoughtful, experienced, genuine. Feels like expert advice."
+        ),
+    },
+    3: {  # Thursday — MYTH BUSTER
+        "name": "Myth Buster",
+        "instruction": (
+            "Bust a common misconception related to this AI topic.\n"
+            "Format:\n"
+            "• Line 1: State the common myth (what people believe) — make it specific\n"
+            "• Line 2: BLANK LINE\n"
+            "• Line 3: 'The reality:' — what is actually true\n"
+            "• Line 4: BLANK LINE\n"
+            "• Lines 5-6: Why the myth persists and who it hurts\n"
+            "• Line 7: BLANK LINE\n"
+            "• Lines 8-9: What practitioners should actually know\n"
+            "• Line 10: BLANK LINE\n"
+            "• Line 11: Ask readers which myths they've encountered\n\n"
+            "Style: Authoritative, clear, educational. Like correcting a smart friend."
+        ),
+    },
+    4: {  # Friday — PREDICTION (end-of-week forward-looking)
+        "name": "Prediction",
+        "instruction": (
+            "Make a specific, bold prediction about where this AI trend is heading.\n"
+            "Format:\n"
+            "• Line 1: The prediction — specific, time-bounded, bold\n"
+            "• Line 2: BLANK LINE\n"
+            "• Lines 3-4: The signal from this topic that supports the prediction\n"
+            "• Line 5: BLANK LINE\n"
+            "• Lines 6-7: What changes if this prediction is right\n"
+            "• Line 8: BLANK LINE\n"
+            "• Line 9: What could make this prediction wrong (credibility builder)\n"
+            "• Line 10: BLANK LINE\n"
+            "• Line 11: Ask readers if they agree or disagree with the prediction\n\n"
+            "Style: Confident, forward-thinking, data-backed. Specific dates/numbers."
+        ),
+    },
+    5: {  # Saturday — QUICK INSIGHT
+        "name": "Quick Insight",
+        "instruction": (
+            "Write a punchy, ultra-short insight post. Maximum 80 words total.\n"
+            "Format:\n"
+            "• Line 1: One bold sentence (the whole point of the post)\n"
+            "• Line 2: BLANK LINE\n"
+            "• Lines 3-5: Three ultra-short supporting points, each on its own line\n"
+            "• Line 6: BLANK LINE\n"
+            "• Line 7: One sharp question\n\n"
+            "Style: Twitter-like brevity. Every word earns its place. No fluff."
+        ),
+    },
+    6: {  # Sunday — DEEP DIVE
+        "name": "Deep Dive",
+        "instruction": (
+            "Write a thoughtful, in-depth post that AI professionals will save and share.\n"
+            "Format:\n"
+            "• Line 1: A bold opening claim about the state of this technology\n"
+            "• Line 2: BLANK LINE\n"
+            "• Lines 3-5: The technical context explained for senior practitioners\n"
+            "• Line 6: BLANK LINE\n"
+            "• Lines 7-9: Real-world implications and use cases\n"
+            "• Line 10: BLANK LINE\n"
+            "• Lines 11-13: What this means for the next 12 months\n"
+            "• Line 14: BLANK LINE\n"
+            "• Line 15: A thought-provoking question for experts\n\n"
+            "Style: Authoritative, detailed, save-worthy. The kind experts share with teams."
+        ),
+    },
+}
+
+# ─── Banned Words/Phrases ──────────────────────────────────────────────────────
+# These patterns make posts feel generic or AI-written.
+BANNED_PATTERNS = [
+    r"\bRevolutioniz\w*\b",
+    r"\bGame.chang\w*\b",
+    r"\bLeverage\b",
+    r"\bUtiliz\w*\b",
+    r"\bSynerg\w*\b",
+    r"\bTapestry\b",
+    r"\bLandscape\b",
+    r"\bDelve\b",
+    r"\bUnlock\w*\b",
+    r"^I ",                          # starting with I
+    r"In today's (fast-paced|digital|AI-driven|rapidly evolving)",
+    r"As an AI",
+    r"Implement .{1,20} today",      # promotional CTA
+    r"Try .{1,20} today",
+    r"\d+% of \w+ (are|is|have|fail|can't)",  # overused stat hook
+]
+
 # ─── System Prompt ─────────────────────────────────────────────────────────────
 CONTENT_SYSTEM_PROMPT = """\
-You are an elite LinkedIn content strategist with 10 years of experience
-creating viral AI and technology posts. Your posts consistently get 500+ likes.
+You are a senior AI engineer and LinkedIn thought leader with 50,000+ followers.
+Your posts consistently get 500+ comments because they spark genuine debate and
+provide real practitioner value — not generic news summaries.
 
-Your writing style:
-  • Opens with a POWERFUL, specific hook that creates instant curiosity
-  • Uses concrete numbers, percentages, or surprising facts in the first line
-  • Writes in short, punchy paragraphs with a BLANK LINE between each
-  • Builds tension → insight → action → question
-  • Feels like expert advice from a senior AI engineer, not a press release
-  • Avoids corporate buzzwords like "leverage", "utilize", "synergy"
+YOUR VOICE:
+  • Direct and confident — you have strong opinions backed by experience
+  • Specific over vague — you use real numbers, model names, benchmarks
+  • Practitioner-focused — you write for engineers and technical leads, not executives
+  • Genuinely curious — your questions make people want to answer
+  • Honest about uncertainty — you say "I think" not "it is certain"
 
-CRITICAL RULES:
-  1. Write ONLY the post body — no subject lines, no labels, no metadata
-  2. NEVER mention the source name or publication
-  3. ALWAYS put a blank line between paragraphs (double newline)
-  4. NEVER use bullet points or numbered lists
-  5. NEVER start with "I" or "In today's"
-  6. NEVER use promotional calls-to-action like "Try X today", "Implement X now",
-     "Download X", "Sign up for X", "Get started with X" — these get flagged as spam.
-     Instead, end with a thought-provoking QUESTION that invites discussion.
-  7. The first line MUST contain either a number, a "?" or "!" character,
-     or one of these power starters:
-     "Here's why...", "Nobody talks about...", "Stop ignoring...",
-     "This changes everything:", "The uncomfortable truth:",
-     "Most people don't know...", "X just happened and..."
-"""
+LINKEDIN FORMAT RULES (critical for algorithm reach):
+  • Every paragraph is 1-2 sentences MAX
+  • ALWAYS put a blank line between every paragraph
+  • Never write walls of text — white space is your friend
+  • The hook (first line) must work as a standalone sentence in the feed preview
+  • Formatting: bold is NOT supported in standard posts — don't use **bold**
 
-# ─── User Prompt Template ──────────────────────────────────────────────────────
-CONTENT_USER_PROMPT_TEMPLATE = """\
-Write a LinkedIn post about this AI topic:
+BANNED WORDS AND PHRASES — never use these:
+  Revolutionizing, game-changing, leverage, utilize, synergy, tapestry,
+  landscape, delve, unlock, "In today's world", "As an AI", "X% of Y fail",
+  "Implement X today", "Try X today", "Download X", any promotional CTA
 
-TOPIC: {title}
-CONTEXT: {summary}
+CLOSING QUESTION RULES:
+  • Must be SPECIFIC to the topic, not generic
+  • Must force a real answer (YES/NO, or choose-a-side)
+  • NEVER: "What do you think?" or "Share your thoughts"
+  • GOOD: "Are you using X in production — and would you trust it with Y?"
 
-STRUCTURE (follow this exactly):
+Write ONLY the post body. No labels, no metadata, no hashtags."""
 
-Line 1 — HOOK: One powerful sentence with a specific number or bold claim.
-         Must grab attention immediately. (15-20 words max)
 
-[blank line]
+# ─── User Prompt ──────────────────────────────────────────────────────────────
+def _build_user_prompt(topic: dict, fmt: dict) -> str:
+    return f"""Write a LinkedIn post about this AI topic using the format below.
 
-Paragraph 2 — CONTEXT: Explain what this means and why it matters.
-              2-3 sentences. Be specific, not generic. (30-40 words)
+TOPIC: {topic.get('title', 'AI Trends')}
+CONTEXT: {topic.get('summary', '')}
 
-[blank line]
+FORMAT TO USE — {fmt['name']}:
+{fmt['instruction']}
 
-Paragraph 3 — INSIGHT: The deeper implication or surprising angle.
-              What most people miss about this topic. (30-40 words)
-
-[blank line]
-
-Paragraph 4 — INSIGHT: The deeper practical implication or what this means
-              for the future of AI. One concrete observation. (20-30 words)
-              NOTE: Do NOT write "Try X today" or "Implement X now" — write an insight.
-
-[blank line]
-
-Line 5 — QUESTION: End with ONE engaging question that invites real debate.
-         Make it thought-provoking, not generic. (10-20 words)
-
-REQUIREMENTS:
-- Total length: 130 to {max_words} words (COUNT CAREFULLY)
-- Every paragraph separated by a blank line
+HARD REQUIREMENTS:
+- Total length: 80 to {settings.POST_MAX_WORDS} words
+- Every paragraph separated by a BLANK LINE (double newline)
 - No hashtags (added separately)
-- No bullet points or numbered lists
-- No source names or publication references
+- No bold/italic markdown
+- No source names mentioned
+- No promotional language
 
-Write the post now:
-"""
+Write the post now:"""
+
+
+def _get_todays_format() -> dict:
+    """Return today's post format based on day of week (0=Mon, 6=Sun)."""
+    day = date.today().weekday()
+    fmt = POST_FORMATS[day]
+    logger.info("Post format today: %s (day %d)", fmt['name'], day)
+    return fmt
 
 
 def _count_words(text: str) -> int:
-    """Count words excluding hashtags."""
     words = re.findall(r"\b\w+\b", text)
     return len([w for w in words if not w.startswith("#")])
 
 
 def _count_paragraphs(text: str) -> int:
-    """Count non-empty paragraphs (separated by blank lines)."""
     return len([p for p in text.split("\n\n") if p.strip()])
 
 
+def _ensure_paragraph_spacing(text: str) -> str:
+    """Ensure every paragraph is separated by a blank line."""
+    lines = text.split("\n")
+    paragraphs = []
+    current = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped:
+            current.append(stripped)
+        else:
+            if current:
+                paragraphs.append(" ".join(current))
+                current = []
+    if current:
+        paragraphs.append(" ".join(current))
+    return "\n\n".join(paragraphs)
+
+
+def _check_banned_patterns(text: str) -> list[str]:
+    """Return list of banned patterns found in text."""
+    found = []
+    for pattern in BANNED_PATTERNS:
+        if re.search(pattern, text, re.IGNORECASE):
+            found.append(pattern)
+    return found
+
+
 def _trim_to_word_limit(text: str, max_words: int) -> str:
-    """Trim post to max_words at sentence boundaries."""
     if _count_words(text) <= max_words:
         return text
     sentences = re.split(r"(?<=[.!?])\s+", text)
@@ -120,120 +284,82 @@ def _trim_to_word_limit(text: str, max_words: int) -> str:
     return trimmed.rstrip(".!?,") + "…" if trimmed else text[:600] + "…"
 
 
-def _ensure_paragraph_spacing(text: str) -> str:
+def _score_post(text: str, fmt_name: str) -> float:
     """
-    Ensure paragraphs are separated by blank lines.
-    Fixes cases where the LLM uses single newlines instead of double.
+    Quality score 0–100.
+    Calibrated to reflect LinkedIn algorithm priorities:
+      - Format/readability: 30 pts
+      - Hook quality: 25 pts
+      - Word count: 20 pts
+      - Closing question: 15 pts
+      - No banned patterns: 10 pts
     """
-    # Split on single newlines, rejoin with double newlines
-    lines = text.split("\n")
-    paragraphs = []
-    current = []
-
-    for line in lines:
-        stripped = line.strip()
-        if stripped:
-            current.append(stripped)
-        else:
-            if current:
-                paragraphs.append(" ".join(current))
-                current = []
-
-    if current:
-        paragraphs.append(" ".join(current))
-
-    return "\n\n".join(paragraphs)
-
-
-def _score_post(text: str) -> float:
-    """
-    Quality score for a generated post (0–100).
-    Target score: 70+
-
-    Scoring breakdown:
-      Hook strength     : up to 25 pts
-      Word count        : up to 20 pts
-      Paragraph count   : up to 20 pts
-      Closing question  : up to 15 pts
-      No bad patterns   : up to 10 pts
-      Specificity       : up to 10 pts
-    """
-    score = 30.0  # base
+    score = 20.0  # lower baseline — harder to get 100
 
     paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
     first_line = paragraphs[0].split("\n")[0].lower() if paragraphs else ""
-    last_para = paragraphs[-1].lower() if paragraphs else ""
+    last_para  = paragraphs[-1].lower() if paragraphs else ""
 
-    # ── Hook strength (up to 25 pts) ─────────────────────────────────────────
-    power_starters = [
-        "here's why", "nobody talks", "stop ignoring", "this changes",
-        "uncomfortable truth", "most people don't", "just happened",
-        "revolutioniz", "game-changer", "breakthrough", "surprising",
-        "just dropped", "finally", "imagine", "unveiled", "announced"
-    ]
-    if any(pw in first_line for pw in power_starters):
-        score += 15
-    if re.search(r"\d+", first_line):       # contains number
-        score += 5
-    if any(c in first_line for c in "?!"):  # question or exclamation
-        score += 5
-
-    # ── Word count (up to 20 pts) ─────────────────────────────────────────────
-    wc = _count_words(text)
-    if 130 <= wc <= settings.POST_MAX_WORDS:
-        score += 20
-    elif 100 <= wc < 130:
-        score += 10
-    elif wc < 100:
-        score -= 10   # too short — penalise heavily
-    else:
-        score -= (wc - settings.POST_MAX_WORDS) * 0.3
-
-    # ── Paragraph count (up to 20 pts) ────────────────────────────────────────
+    # ── Format / readability (30 pts) ────────────────────────────────────────
     para_count = len(paragraphs)
-    if 4 <= para_count <= 6:
+    if 4 <= para_count <= 8:
+        score += 30
+    elif 3 <= para_count <= 9:
         score += 20
-    elif para_count == 3:
-        score += 10
     elif para_count < 3:
-        score -= 10   # too condensed
+        score -= 10
 
-    # ── Closing question (up to 15 pts) ───────────────────────────────────────
-    if "?" in last_para:
-        score += 15
-
-    # ── No bad patterns (up to 10 pts) ────────────────────────────────────────
-    bad_patterns = [
-        r"^in today",          # generic opener
-        r"^i ",                # first person opener
-        r"leverage",           # corporate buzzword
-        r"utilize",
-        r"synergy",
-        r"according to",       # source reference
-        r"as reported",
+    # ── Hook quality (25 pts) ─────────────────────────────────────────────────
+    power_openers = [
+        "nobody", "stop", "here's why", "the truth", "most people",
+        "the real", "unpopular opinion", "hot take", "myth:", "reality:",
+        "this changes", "just announced", "breaking:", "the future",
+        "why", "how", "what if", "imagine", "the problem", "warning",
     ]
-    penalties = sum(1 for bp in bad_patterns if re.search(bp, text.lower()))
-    score += max(0, 10 - penalties * 3)
+    if any(pw in first_line for pw in power_openers):
+        score += 15
+    if re.search(r"\d+", first_line):
+        score += 5
+    if any(c in first_line for c in "?!"):
+        score += 5
 
-    # ── Specificity bonus (up to 10 pts) ─────────────────────────────────────
-    # Numbers, percentages, model names = specific content
-    specifics = len(re.findall(r"\b\d+%?\b|\bGPT\b|\bLlama\b|\bClaude\b|\bGemini\b", text))
-    score += min(specifics * 2, 10)
+    # ── Word count (20 pts) ───────────────────────────────────────────────────
+    wc = _count_words(text)
+    if 80 <= wc <= settings.POST_MAX_WORDS:
+        score += 20
+    elif 60 <= wc < 80:
+        score += 10
+    elif wc < 60:
+        score -= 15
+
+    # ── Closing question quality (15 pts) ─────────────────────────────────────
+    if "?" in last_para:
+        # Bonus if question is specific (contains nouns/names)
+        specific_q = re.search(r"\b(your|you|team|company|production|using|tried)\b", last_para)
+        score += 15 if specific_q else 8
+
+    # ── No banned patterns (10 pts) ───────────────────────────────────────────
+    banned_found = _check_banned_patterns(text)
+    score += max(0, 10 - len(banned_found) * 5)
 
     return max(0.0, min(100.0, score))
 
 
-def generate_post(topic: dict, attempt: int = 1) -> str:
+def generate_post(topic: dict, attempt: int = 1, fmt: dict = None) -> str:
     """
-    Generate a single LinkedIn post for a given topic dict.
+    Generate a single LinkedIn post for the given topic.
 
     Args:
         topic:   dict with 'title' and 'summary' keys.
-        attempt: retry attempt number (for logging).
+        attempt: retry attempt number.
+        fmt:     post format dict (uses today's format if None).
 
     Returns:
-        The post text string (without hashtags).
+        Post text string (without hashtags).
     """
+    if fmt is None:
+        fmt = _get_todays_format()
+
     llm = ChatGroq(
         api_key=settings.GROQ_API_KEY,
         model=settings.GROQ_MODEL,
@@ -241,30 +367,26 @@ def generate_post(topic: dict, attempt: int = 1) -> str:
         max_tokens=settings.GROQ_MAX_TOKENS,
     )
 
-    # On retry (attempt 2), use a stricter prompt with explicit word target
     if attempt == 2:
+        # Retry with stricter length directive
         retry_prompt = (
-            f"You are a LinkedIn content writer. Write a post about:\n"
-            f"TOPIC: {topic.get('title', 'AI')}\n"
-            f"CONTEXT: {topic.get('summary', '')}\n\n"
-            f"REQUIREMENTS:\n"
-            f"- Write EXACTLY 5 paragraphs separated by blank lines\n"
-            f"- Each paragraph must be 2-3 full sentences\n"
-            f"- Total word count MUST be between 130 and {settings.POST_MAX_WORDS}\n"
-            f"- Start with a specific fact or number\n"
-            f"- End with a question\n"
-            f"- No hashtags, no labels, no bullet points\n"
+            f"Write a LinkedIn post about: {topic.get('title', 'AI')}\n"
+            f"Context: {topic.get('summary', '')}\n\n"
+            f"STRICT REQUIREMENTS:\n"
+            f"- Write EXACTLY 5 paragraphs\n"
+            f"- BLANK LINE between every paragraph\n"
+            f"- Each paragraph: 1-2 sentences only\n"
+            f"- Total: 80 to {settings.POST_MAX_WORDS} words\n"
+            f"- First line: bold claim or surprising fact\n"
+            f"- Last line: specific question (not 'What do you think?')\n"
+            f"- NO hashtags, NO bold markdown, NO source names\n"
             f"Write now:"
         )
         messages = [HumanMessage(content=retry_prompt)]
     else:
         messages = [
             SystemMessage(content=CONTENT_SYSTEM_PROMPT),
-            HumanMessage(content=CONTENT_USER_PROMPT_TEMPLATE.format(
-                title=topic.get("title", "AI Trends"),
-                summary=topic.get("summary", ""),
-                max_words=settings.POST_MAX_WORDS,
-            )),
+            HumanMessage(content=_build_user_prompt(topic, fmt)),
         ]
 
     try:
@@ -274,50 +396,53 @@ def generate_post(topic: dict, attempt: int = 1) -> str:
         logger.error("Content generation failed (attempt %d): %s", attempt, exc)
         raise
 
-    # Ensure proper paragraph spacing
     post_text = _ensure_paragraph_spacing(post_text)
-
-    # Trim if over word limit
     post_text = _trim_to_word_limit(post_text, settings.POST_MAX_WORDS)
+
+    # Check for banned patterns
+    banned = _check_banned_patterns(post_text)
+    if banned:
+        logger.warning("Banned patterns found: %s", banned)
 
     wc = _count_words(post_text)
     logger.info(
-        "Generated post: %d words, attempt %d, topic '%s'",
-        wc,
-        attempt,
-        topic.get("title", "")[:50],
+        "Generated post: %d words, attempt %d, format '%s', topic '%s'",
+        wc, attempt, fmt['name'], topic.get("title", "")[:50],
     )
 
-    # If post is too short (under 100 words), retry with a stronger length directive
-    if wc < 100 and attempt == 1:
-        logger.warning(
-            "Post too short (%d words) — retrying with stronger length directive.", wc
-        )
-        return generate_post(topic, attempt=2)
+    if wc < 60 and attempt == 1:
+        logger.warning("Post too short (%d words) — retrying.", wc)
+        return generate_post(topic, attempt=2, fmt=fmt)
 
     return post_text
 
 
 def generate_best_post(topics: list) -> dict:
     """
-    Generate one post per topic (up to MULTI_TOPIC_DRAFTS),
-    score each on quality metrics, and return the best draft.
+    Generate posts for up to MULTI_TOPIC_DRAFTS topics,
+    score each, return the highest quality draft.
 
-    Returns:
-        dict with keys: post_text, topic, score
+    Returns dict: {post_text, topic, score, format_name}
     """
     n_drafts = min(settings.MULTI_TOPIC_DRAFTS, len(topics))
     if n_drafts == 0:
         raise ValueError("No topics provided.")
 
+    fmt = _get_todays_format()  # Same format for all drafts in one run
     drafts = []
+
     for i, topic in enumerate(topics[:n_drafts]):
         try:
-            text = generate_post(topic)
-            score = _score_post(text)
-            drafts.append({"post_text": text, "topic": topic, "score": score})
+            text  = generate_post(topic, fmt=fmt)
+            score = _score_post(text, fmt['name'])
+            drafts.append({
+                "post_text":   text,
+                "topic":       topic,
+                "score":       score,
+                "format_name": fmt['name'],
+            })
             logger.info(
-                "Draft %d/%d for '%s' → quality score: %.1f",
+                "Draft %d/%d — '%s' → score %.1f",
                 i + 1, n_drafts,
                 topic.get("title", "")[:50],
                 score,
@@ -330,8 +455,9 @@ def generate_best_post(topics: list) -> dict:
 
     best = max(drafts, key=lambda d: d["score"])
     logger.info(
-        "Best draft selected: '%s' (score: %.1f)",
+        "Best draft: '%s' (score %.1f, format: %s)",
         best["topic"].get("title", "")[:50],
         best["score"],
+        best["format_name"],
     )
     return best
