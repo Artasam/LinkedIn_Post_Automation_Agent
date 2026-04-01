@@ -1,11 +1,5 @@
 [
   {
-    "title": "Accelerating Diffusion Models with BiGain: A Unified Token Compression Approach",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7439041419643740160",
-    "published_at": "2026-03-15T20:14:47.994799+00:00"
-  },
-  {
     "title": "Revolutionizing Predictive Intelligence with Separable Neural Architectures",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7439044773971152896",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7444619857385639936",
     "published_at": "2026-03-31T05:41:28.952812+00:00"
+  },
+  {
+    "title": "Unlocking the Power of AI Code Review: A New Local Solution for Pre-Commit Checks",
+    "source": "Pypi.org",
+    "post_id": "urn:li:share:7444984967752876032",
+    "published_at": "2026-04-01T05:52:17.819114+00:00"
   }
 ]
