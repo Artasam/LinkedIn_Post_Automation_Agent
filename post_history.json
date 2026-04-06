@@ -1,11 +1,5 @@
 [
   {
-    "title": "Unlocking Large Language Models with Neuron-Aware Data Selection",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7439381467996135424",
-    "published_at": "2026-03-16T18:45:59.622978+00:00"
-  },
-  {
     "title": "Revolutionizing Materials Science with AI-Driven Computational Research",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7439391246860718081",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7445715048452227073",
     "published_at": "2026-04-03T06:13:22.580277+00:00"
+  },
+  {
+    "title": "How to Identify the Most Informative Interactions in Multi-Step AI Systems",
+    "source": "Arxiv.org",
+    "post_id": "urn:li:share:7446790197834358784",
+    "published_at": "2026-04-06T05:25:38.156917+00:00"
   }
 ]
