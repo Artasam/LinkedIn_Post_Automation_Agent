@@ -1,11 +1,5 @@
 [
   {
-    "title": "Revolutionizing Vision-to-Code Tasks with Visual-ERM",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7439393894712127488",
-    "published_at": "2026-03-16T19:35:22.461432+00:00"
-  },
-  {
     "title": "ATLAS: A New Open-Source AI Project for Self-Improving Trading Agents",
     "source": "GitHub",
     "post_id": "urn:li:share:7439396814300119041",
@@ -178,5 +172,11 @@
     "source": "Fashionunited.nz",
     "post_id": "urn:li:share:7447157174176260096",
     "published_at": "2026-04-07T05:43:52.567642+00:00"
+  },
+  {
+    "title": "How to Boost Video Quality with AI-Powered Diffusion Models",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7447519731793870848",
+    "published_at": "2026-04-08T05:44:32.717003+00:00"
   }
 ]
