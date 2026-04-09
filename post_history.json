@@ -1,11 +1,5 @@
 [
   {
-    "title": "ATLAS: A New Open-Source AI Project for Self-Improving Trading Agents",
-    "source": "GitHub",
-    "post_id": "urn:li:share:7439396814300119041",
-    "published_at": "2026-03-16T19:46:58.722145+00:00"
-  },
-  {
     "title": "LLMs Can Manipulate Cooperative Behavior in Multi-Agent Systems",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7439400664113389568",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7447519731793870848",
     "published_at": "2026-04-08T05:44:32.717003+00:00"
+  },
+  {
+    "title": "How to Make Large Language Models More Persuasive in Multi-Agent Debates",
+    "source": "Nature.com",
+    "post_id": "urn:li:share:7447882020405485568",
+    "published_at": "2026-04-09T05:44:08.986038+00:00"
   }
 ]
