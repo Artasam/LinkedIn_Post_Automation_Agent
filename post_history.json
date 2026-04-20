@@ -1,11 +1,5 @@
 [
   {
-    "title": "Revolutionizing Code Generation with Adversarial Reinforcement Learning",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7439770837118959616",
-    "published_at": "2026-03-17T20:33:12.671983+00:00"
-  },
-  {
     "title": "Revolutionizing Conversational AI: Chronos Agents with Long-Term Memory",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7439969980940611584",
@@ -178,5 +172,11 @@
     "source": "Wikipedia",
     "post_id": "urn:li:share:7450799800146591744",
     "published_at": "2026-04-17T06:58:22.068285+00:00"
+  },
+  {
+    "title": "How Politeness Affects AI Model Responses",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7451867855404384256",
+    "published_at": "2026-04-20T05:42:26.496465+00:00"
   }
 ]
