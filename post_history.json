@@ -1,11 +1,5 @@
 [
   {
-    "title": "Breakthrough in Multilingual Embeddings: F2LLM-v2 Achieves State-of-the-Art Results",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7441052103390924800",
-    "published_at": "2026-03-21T09:24:29.790745+00:00"
-  },
-  {
     "title": "Revolutionizing Autonomous Driving with DriveTok's 3D Scene Tokenization",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7441414640053407744",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7452959013861961728",
     "published_at": "2026-04-23T05:58:18.446953+00:00"
+  },
+  {
+    "title": "How to Make Continual Learning More Stable and Efficient",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7453338145581854720",
+    "published_at": "2026-04-24T07:04:50.670469+00:00"
   }
 ]
