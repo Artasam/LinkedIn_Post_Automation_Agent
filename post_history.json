@@ -1,11 +1,5 @@
 [
   {
-    "title": "How AI Generates Indoor Scenes: A New Era for 3D Space Planning",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7450059635195092992",
-    "published_at": "2026-04-15T05:57:13.207544+00:00"
-  },
-  {
     "title": "Exposing the Hidden Flaws in LLM Reasoning",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7450421457337147392",
@@ -178,5 +172,11 @@
     "source": "Redhat.com",
     "post_id": "urn:li:share:7463132198108540930",
     "published_at": "2026-05-21T07:42:55.087816+00:00"
+  },
+  {
+    "title": "How to Train Language Models for Real-World Generalization",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7463504777847447552",
+    "published_at": "2026-05-22T08:23:24.667478+00:00"
   }
 ]
