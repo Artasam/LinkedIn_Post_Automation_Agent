@@ -1,11 +1,5 @@
 [
   {
-    "title": "How Large Language Models Are Revolutionizing Natural Language Processing",
-    "source": "Wikipedia",
-    "post_id": "urn:li:share:7450799800146591744",
-    "published_at": "2026-04-17T06:58:22.068285+00:00"
-  },
-  {
     "title": "How Politeness Affects AI Model Responses",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7451867855404384256",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7464573443473121280",
     "published_at": "2026-05-25T07:09:54.328593+00:00"
+  },
+  {
+    "title": "How AI Models Forget - And What You Can Do About It",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7464946579129384960",
+    "published_at": "2026-05-26T07:52:36.850475+00:00"
   }
 ]
