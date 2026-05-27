@@ -1,11 +1,5 @@
 [
   {
-    "title": "How Politeness Affects AI Model Responses",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7451867855404384256",
-    "published_at": "2026-04-20T05:42:26.496465+00:00"
-  },
-  {
     "title": "How Large Language Models Are Revolutionizing Natural Language Processing",
     "source": "Wikipedia",
     "post_id": "urn:li:share:7452234335409139712",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7464946579129384960",
     "published_at": "2026-05-26T07:52:36.850475+00:00"
+  },
+  {
+    "title": "How Prompt Engineering Can Make or Break Your LLM's Performance",
+    "source": "Arxiv.org",
+    "post_id": "urn:li:share:7465313300457799681",
+    "published_at": "2026-05-27T08:09:50.395440+00:00"
   }
 ]
