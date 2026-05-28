@@ -1,11 +1,5 @@
 [
   {
-    "title": "How Large Language Models Are Revolutionizing Natural Language Processing",
-    "source": "Wikipedia",
-    "post_id": "urn:li:share:7452234335409139712",
-    "published_at": "2026-04-21T05:58:42.169121+00:00"
-  },
-  {
     "title": "Simplifying Vision-Language-Action Models with a Unified Framework",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7452596308445421568",
@@ -178,5 +172,11 @@
     "source": "Arxiv.org",
     "post_id": "urn:li:share:7465313300457799681",
     "published_at": "2026-05-27T08:09:50.395440+00:00"
+  },
+  {
+    "title": "Doubling LLM Cluster Capacity Without Increasing GPU Costs",
+    "source": "Redhat.com",
+    "post_id": "urn:li:share:7465670734527401984",
+    "published_at": "2026-05-28T07:50:09.238552+00:00"
   }
 ]
