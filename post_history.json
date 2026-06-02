@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Make Continual Learning More Stable and Efficient",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7453338145581854720",
-    "published_at": "2026-04-24T07:04:50.670469+00:00"
-  },
-  {
     "title": "Unlocking AI Agent Efficiency: Cutting Token Consumption Costs",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7454407912262615040",
@@ -178,5 +172,11 @@
     "source": "Github.io",
     "post_id": "urn:li:share:7467130498327146496",
     "published_at": "2026-06-01T08:30:43.670168+00:00"
+  },
+  {
+    "title": "What Happens When AI Chatbots Are Asked to Promote Violence?",
+    "source": "ABC News (AU)",
+    "post_id": "urn:li:share:7467495266301067264",
+    "published_at": "2026-06-02T08:40:11.617073+00:00"
   }
 ]
