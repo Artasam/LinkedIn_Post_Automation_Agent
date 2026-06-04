@@ -1,11 +1,5 @@
 [
   {
-    "title": "Turbocharge Your NLP Deployments with Rust-Powered LLM Inference",
-    "source": "Pypi.org",
-    "post_id": "urn:li:share:7454777667150655488",
-    "published_at": "2026-04-28T06:24:59.345822+00:00"
-  },
-  {
     "title": "How Top AI Talent is Leaving Big Tech to Launch Revolutionary Startups",
     "source": "CNBC",
     "post_id": "urn:li:share:7455138737316921344",
@@ -178,5 +172,11 @@
     "source": "C-sharpcorner.com",
     "post_id": "urn:li:share:7467863051208273920",
     "published_at": "2026-06-03T09:01:38.016833+00:00"
+  },
+  {
+    "title": "How to Use Offensive Security Tools to Test Your AI Models",
+    "source": "GitHub",
+    "post_id": "urn:li:share:7468213353564332033",
+    "published_at": "2026-06-04T08:13:36.676713+00:00"
   }
 ]
