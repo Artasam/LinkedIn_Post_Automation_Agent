@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Optimize ADMM for Faster Convergence in Real-World Applications",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7455501361682464768",
-    "published_at": "2026-04-30T06:20:41.565875+00:00"
-  },
-  {
     "title": "How to Make Large Language Models More Resistant to Reinforcement Learning Manipulation",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7455880177294688256",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7468583415932669953",
     "published_at": "2026-06-05T08:44:06.329603+00:00"
+  },
+  {
+    "title": "What Happens When Large Language Models Learn Continuously",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7469651211630301184",
+    "published_at": "2026-06-08T07:27:08.542552+00:00"
   }
 ]
