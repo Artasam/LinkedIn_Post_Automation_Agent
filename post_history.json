@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Make Large Language Models More Resistant to Reinforcement Learning Manipulation",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7455880177294688256",
-    "published_at": "2026-05-01T07:25:58.079022+00:00"
-  },
-  {
     "title": "What Happens When AI Chatbots Expose Sensitive Patient Data?",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7456949423143620608",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7469651211630301184",
     "published_at": "2026-06-08T07:27:08.542552+00:00"
+  },
+  {
+    "title": "How to Make Your AI Models More Transparent with Evaluation Cards",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7470019969683038208",
+    "published_at": "2026-06-09T07:52:27.849295+00:00"
   }
 ]
