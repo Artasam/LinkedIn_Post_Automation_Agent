@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Make Reinforcement Learning More Reliable in Robotics",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7457310734503276546",
-    "published_at": "2026-05-05T06:10:29.994986+00:00"
-  },
-  {
     "title": "Demystifying Large Language Models: What You Need to Know",
     "source": "Hackaday",
     "post_id": "urn:li:share:7457677030134939648",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7470387679398981632",
     "published_at": "2026-06-10T08:13:36.280158+00:00"
+  },
+  {
+    "title": "How to Make Your Vision-Language Models More Efficient",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7470753845326004224",
+    "published_at": "2026-06-11T08:28:36.934064+00:00"
   }
 ]
