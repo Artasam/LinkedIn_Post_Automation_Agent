@@ -1,11 +1,5 @@
 [
   {
-    "title": "Demystifying Large Language Models: What You Need to Know",
-    "source": "Hackaday",
-    "post_id": "urn:li:share:7457677030134939648",
-    "published_at": "2026-05-06T06:26:01.711233+00:00"
-  },
-  {
     "title": "How Transformers Are Learning from Examples Without Requiring Model Updates",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7458040085607976960",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7470753845326004224",
     "published_at": "2026-06-11T08:28:36.934064+00:00"
+  },
+  {
+    "title": "How to Improve LLM Agents in Dynamic Environments",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7471123764076916736",
+    "published_at": "2026-06-12T08:58:32.858671+00:00"
   }
 ]
