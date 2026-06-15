@@ -1,11 +1,5 @@
 [
   {
-    "title": "How Transformers Are Learning from Examples Without Requiring Model Updates",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7458040085607976960",
-    "published_at": "2026-05-07T06:28:40.440683+00:00"
-  },
-  {
     "title": "How to Leverage Open-Source AI Projects for Real-World Applications",
     "source": "GitHub",
     "post_id": "urn:li:share:7458408538705514496",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7471123764076916736",
     "published_at": "2026-06-12T08:58:32.858671+00:00"
+  },
+  {
+    "title": "How Vision-Language Models Really Work",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7472171508568711169",
+    "published_at": "2026-06-15T06:21:54.691380+00:00"
   }
 ]
