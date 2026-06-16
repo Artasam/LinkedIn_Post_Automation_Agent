@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Leverage Open-Source AI Projects for Real-World Applications",
-    "source": "GitHub",
-    "post_id": "urn:li:share:7458408538705514496",
-    "published_at": "2026-05-08T06:52:46.706661+00:00"
-  },
-  {
     "title": "How to Supercharge Your Language Models with Test-Time Scaling",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7459492588602048512",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7472171508568711169",
     "published_at": "2026-06-15T06:21:54.691380+00:00"
+  },
+  {
+    "title": "How to Protect Your AI Systems from Stolen Credential Attacks",
+    "source": "Help Net Security",
+    "post_id": "urn:li:share:7472534340787363841",
+    "published_at": "2026-06-16T06:23:40.599259+00:00"
   }
 ]
