@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Supercharge Your Large Language Models with Modular Skills",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7459852880531922944",
-    "published_at": "2026-05-12T06:32:04.353058+00:00"
-  },
-  {
     "title": "How Vision Transformers Can Supercharge Your Computer Vision Projects",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7460218259808903168",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7472895275179757568",
     "published_at": "2026-06-17T06:17:54.041351+00:00"
+  },
+  {
+    "title": "Streamlining AI Decision-Making with Preference-Based Reinforcement Learning",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7473245039201042433",
+    "published_at": "2026-06-18T05:27:44.283191+00:00"
   }
 ]
