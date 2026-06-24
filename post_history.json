@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Choose the Right Datasets for Your Large Language Models",
-    "source": "ahammadmejbah/Awesome-Datasets-Hub",
-    "post_id": "urn:li:share:7462139601223274496",
-    "published_at": "2026-05-18T13:58:41.561497+00:00"
-  },
-  {
     "title": "What Makes Large Vision-Language-Action Models Tick in Robotics",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7462147138567925760",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7475048446631034880",
     "published_at": "2026-06-23T04:53:49.683979+00:00"
+  },
+  {
+    "title": "What's Next for Text-to-Image Generation",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7475413560311877632",
+    "published_at": "2026-06-24T05:04:39.850763+00:00"
   }
 ]
