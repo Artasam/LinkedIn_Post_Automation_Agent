@@ -1,11 +1,5 @@
 [
   {
-    "title": "What Makes Large Vision-Language-Action Models Tick in Robotics",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7462147138567925760",
-    "published_at": "2026-05-18T14:28:38.303879+00:00"
-  },
-  {
     "title": "How AI Can Influence Group Decision-Making",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7462148551628947456",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7475413560311877632",
     "published_at": "2026-06-24T05:04:39.850763+00:00"
+  },
+  {
+    "title": "What Your AI Models Aren't Telling You: The Hidden Costs of AI-Powered Coding",
+    "source": "ComputerWeekly.com",
+    "post_id": "urn:li:share:7475773964510961664",
+    "published_at": "2026-06-25T04:56:47.065403+00:00"
   }
 ]
