@@ -1,11 +1,5 @@
 [
   {
-    "title": "How AI Can Influence Group Decision-Making",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7462148551628947456",
-    "published_at": "2026-05-18T14:34:14.973564+00:00"
-  },
-  {
     "title": "Automating Code Analysis with AI-Powered Agents",
     "source": "C-sharpcorner.com",
     "post_id": "urn:li:share:7462197224769413121",
@@ -178,5 +172,11 @@
     "source": "ComputerWeekly.com",
     "post_id": "urn:li:share:7475773964510961664",
     "published_at": "2026-06-25T04:56:47.065403+00:00"
+  },
+  {
+    "title": "Are Large Language Models Always the Best Choice for Marketing Tasks?",
+    "source": "AdExchanger",
+    "post_id": "urn:li:share:7476156155887734784",
+    "published_at": "2026-06-26T06:15:28.555897+00:00"
   }
 ]
