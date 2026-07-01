@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Improve Vision-Language Models by Separating Perception and Reasoning",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7462772432081342465",
-    "published_at": "2026-05-20T07:53:19.979416+00:00"
-  },
-  {
     "title": "How to Test Model Safety in Production Systems",
     "source": "Redhat.com",
     "post_id": "urn:li:share:7463132198108540930",
@@ -178,5 +172,11 @@
     "source": "C-sharpcorner.com",
     "post_id": "urn:li:share:7477585846456672257",
     "published_at": "2026-06-30T04:56:32.972015+00:00"
+  },
+  {
+    "title": "How to Reduce Errors When Using Large Language Models with Tables",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7477955324117970944",
+    "published_at": "2026-07-01T05:24:43.697625+00:00"
   }
 ]
