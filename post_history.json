@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Test Model Safety in Production Systems",
-    "source": "Redhat.com",
-    "post_id": "urn:li:share:7463132198108540930",
-    "published_at": "2026-05-21T07:42:55.087816+00:00"
-  },
-  {
     "title": "How to Train Language Models for Real-World Generalization",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7463504777847447552",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7477955324117970944",
     "published_at": "2026-07-01T05:24:43.697625+00:00"
+  },
+  {
+    "title": "Can AI Really Assemble Furniture on Its Own?",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7478309592775651328",
+    "published_at": "2026-07-02T04:52:27.634105+00:00"
   }
 ]
