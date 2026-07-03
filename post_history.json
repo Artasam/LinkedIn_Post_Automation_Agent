@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Train Language Models for Real-World Generalization",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7463504777847447552",
-    "published_at": "2026-05-22T08:23:24.667478+00:00"
-  },
-  {
     "title": "How to Optimize Hyperparameters in Mixture-of-Experts Models",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7464573443473121280",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7478309592775651328",
     "published_at": "2026-07-02T04:52:27.634105+00:00"
+  },
+  {
+    "title": "How to Monitor AI Models for Unsafe Outputs in Real-Time",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7478688422799347712",
+    "published_at": "2026-07-03T05:57:47.761744+00:00"
   }
 ]
