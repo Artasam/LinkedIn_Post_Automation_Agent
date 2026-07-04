@@ -5,15 +5,11 @@ Central configuration for the LinkedIn AI Content Automation Agent.
 Single source of truth for all environment variables and constants.
 
 Model selection:
-  llama-3.3-70b-versatile — default
-  • Best prose quality for professional LinkedIn content
-  • 6,000 TPM limit — pipeline uses ~4,500 TPM (5 LLM calls × ~900 TPM)
-  • Stable production model (not preview)
-
+  openai/gpt-oss-120b — default
+  
   Other available Groq models:
-  "llama-3.1-8b-instant"                      TPM: 6,000  — fastest, lower quality
-  "meta-llama/llama-4-scout-17b-16e-instruct" TPM: 30,000 — multimodal preview
-  "qwen/qwen3-32b"                             TPM: 6,000  — math/coding focus
+  "openai/gpt-oss-20b"                      
+  "qwen/qwen3.6-27b" 
 """
 
 import os
@@ -23,10 +19,9 @@ load_dotenv()
 
 # ─── Groq / LLM ───────────────────────────────────────────────────────────────
 GROQ_API_KEY:     str   = os.getenv("GROQ_API_KEY", "")
-GROQ_MODEL:       str   = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_MODEL:       str   = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 GROQ_TEMPERATURE: float = float(os.getenv("GROQ_TEMPERATURE", "0.7"))
-# 700 tokens gives content agent room to write 130-300 words comfortably.
-# 5 LLM calls × ~900 TPM = ~4,500 TPM — within 6,000 TPM limit.
+
 GROQ_MAX_TOKENS:  int   = int(os.getenv("GROQ_MAX_TOKENS", "700"))
 
 # ─── LinkedIn ─────────────────────────────────────────────────────────────────
