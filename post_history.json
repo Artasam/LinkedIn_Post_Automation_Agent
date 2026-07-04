@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Optimize Hyperparameters in Mixture-of-Experts Models",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7464573443473121280",
-    "published_at": "2026-05-25T07:09:54.328593+00:00"
-  },
-  {
     "title": "How AI Models Forget - And What You Can Do About It",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7464946579129384960",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7478688422799347712",
     "published_at": "2026-07-03T05:57:47.761744+00:00"
+  },
+  {
+    "title": "How to Keep Your LLMs from Generating Unsafe Outputs in Production",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7479113026470567936",
+    "published_at": "2026-07-04T10:05:01.039847+00:00"
   }
 ]
