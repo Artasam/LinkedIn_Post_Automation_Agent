@@ -1,11 +1,5 @@
 [
   {
-    "title": "How AI Models Forget - And What You Can Do About It",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7464946579129384960",
-    "published_at": "2026-05-26T07:52:36.850475+00:00"
-  },
-  {
     "title": "How Prompt Engineering Can Make or Break Your LLM's Performance",
     "source": "Arxiv.org",
     "post_id": "urn:li:share:7465313300457799681",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7479113026470567936",
     "published_at": "2026-07-04T10:05:01.039847+00:00"
+  },
+  {
+    "title": "How AI-Powered Attacks Are Changing the Cybersecurity Landscape",
+    "source": "BleepingComputer",
+    "post_id": "urn:li:share:7479763294275158016",
+    "published_at": "2026-07-06T05:08:57.021152+00:00"
   }
 ]
