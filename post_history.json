@@ -1,11 +1,5 @@
 [
   {
-    "title": "How Prompt Engineering Can Make or Break Your LLM's Performance",
-    "source": "Arxiv.org",
-    "post_id": "urn:li:share:7465313300457799681",
-    "published_at": "2026-05-27T08:09:50.395440+00:00"
-  },
-  {
     "title": "Doubling LLM Cluster Capacity Without Increasing GPU Costs",
     "source": "Redhat.com",
     "post_id": "urn:li:share:7465670734527401984",
@@ -178,5 +172,11 @@
     "source": "BleepingComputer",
     "post_id": "urn:li:share:7479763294275158016",
     "published_at": "2026-07-06T05:08:57.021152+00:00"
+  },
+  {
+    "title": "Improving Robot Vision with Flexible Camera Setups",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7480118711052574720",
+    "published_at": "2026-07-07T04:41:14.976510+00:00"
   }
 ]
