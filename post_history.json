@@ -1,11 +1,5 @@
 [
   {
-    "title": "Doubling LLM Cluster Capacity Without Increasing GPU Costs",
-    "source": "Redhat.com",
-    "post_id": "urn:li:share:7465670734527401984",
-    "published_at": "2026-05-28T07:50:09.238552+00:00"
-  },
-  {
     "title": "How to Stress Test Your Large Language Models for Maximum Robustness",
     "source": "GitHub",
     "post_id": "urn:li:share:7466046468320124930",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7480118711052574720",
     "published_at": "2026-07-07T04:41:14.976510+00:00"
+  },
+  {
+    "title": "How AI Can Improve Cancer Treatment Decisions",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7480474931693248512",
+    "published_at": "2026-07-08T04:16:44.966268+00:00"
   }
 ]
