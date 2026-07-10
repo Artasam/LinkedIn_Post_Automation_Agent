@@ -1,11 +1,5 @@
 [
   {
-    "title": "How Government Control of Media Impacts Your AI Models",
-    "source": "Github.io",
-    "post_id": "urn:li:share:7467130498327146496",
-    "published_at": "2026-06-01T08:30:43.670168+00:00"
-  },
-  {
     "title": "What Happens When AI Chatbots Are Asked to Promote Violence?",
     "source": "ABC News (AU)",
     "post_id": "urn:li:share:7467495266301067264",
@@ -178,5 +172,11 @@
     "source": "Pypi.org",
     "post_id": "urn:li:share:7480844865661100033",
     "published_at": "2026-07-09T04:46:43.972825+00:00"
+  },
+  {
+    "title": "What You Need to Know About OpenAI's New GPT-Live Voice Models",
+    "source": "SiliconANGLE News",
+    "post_id": "urn:li:share:7481227970779627521",
+    "published_at": "2026-07-10T06:09:03.519331+00:00"
   }
 ]
