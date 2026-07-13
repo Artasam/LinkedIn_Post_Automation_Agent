@@ -1,11 +1,5 @@
 [
   {
-    "title": "What Happens When AI Chatbots Are Asked to Promote Violence?",
-    "source": "ABC News (AU)",
-    "post_id": "urn:li:share:7467495266301067264",
-    "published_at": "2026-06-02T08:40:11.617073+00:00"
-  },
-  {
     "title": "Securing Your AI Systems from Exploits",
     "source": "C-sharpcorner.com",
     "post_id": "urn:li:share:7467863051208273920",
@@ -178,5 +172,11 @@
     "source": "SiliconANGLE News",
     "post_id": "urn:li:share:7481227970779627521",
     "published_at": "2026-07-10T06:09:03.519331+00:00"
+  },
+  {
+    "title": "How Vision-Language Models Have Improved Over the Last Decade",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7482289815439265792",
+    "published_at": "2026-07-13T04:28:26.981711+00:00"
   }
 ]
