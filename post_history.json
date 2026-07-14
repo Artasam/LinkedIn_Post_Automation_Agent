@@ -1,11 +1,5 @@
 [
   {
-    "title": "Securing Your AI Systems from Exploits",
-    "source": "C-sharpcorner.com",
-    "post_id": "urn:li:share:7467863051208273920",
-    "published_at": "2026-06-03T09:01:38.016833+00:00"
-  },
-  {
     "title": "How to Use Offensive Security Tools to Test Your AI Models",
     "source": "GitHub",
     "post_id": "urn:li:share:7468213353564332033",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7482289815439265792",
     "published_at": "2026-07-13T04:28:26.981711+00:00"
+  },
+  {
+    "title": "What's Driving the Shift from GPUs to CPUs in AI Infrastructure",
+    "source": "Digitimes",
+    "post_id": "urn:li:share:7482642784877830144",
+    "published_at": "2026-07-14T03:51:01.465430+00:00"
   }
 ]
