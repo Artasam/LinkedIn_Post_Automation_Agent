@@ -1,11 +1,5 @@
 [
   {
-    "title": "How Code Language Models Can Better Understand Software Evolution",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7468583415932669953",
-    "published_at": "2026-06-05T08:44:06.329603+00:00"
-  },
-  {
     "title": "What Happens When Large Language Models Learn Continuously",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7469651211630301184",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7483009367298981889",
     "published_at": "2026-07-15T04:07:41.495066+00:00"
+  },
+  {
+    "title": "How to Make Large Language Models More Efficient in Human-AI Interactions",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7483368562833702912",
+    "published_at": "2026-07-16T03:55:00.036689+00:00"
   }
 ]
