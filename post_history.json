@@ -1,11 +1,5 @@
 [
   {
-    "title": "What Happens When Large Language Models Learn Continuously",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7469651211630301184",
-    "published_at": "2026-06-08T07:27:08.542552+00:00"
-  },
-  {
     "title": "How to Make Your AI Models More Transparent with Evaluation Cards",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7470019969683038208",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7483368562833702912",
     "published_at": "2026-07-16T03:55:00.036689+00:00"
+  },
+  {
+    "title": "How Poisoned Data Can Compromise Your Language Models",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7483751719554842624",
+    "published_at": "2026-07-17T05:17:31.732373+00:00"
   }
 ]
