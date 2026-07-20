@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Make Your AI Models More Transparent with Evaluation Cards",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7470019969683038208",
-    "published_at": "2026-06-09T07:52:27.849295+00:00"
-  },
-  {
     "title": "How to Fine-Tune Your AI Models for Better Performance",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7470387679398981632",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7483751719554842624",
     "published_at": "2026-07-17T05:17:31.732373+00:00"
+  },
+  {
+    "title": "How to Supercharge Your LLMs with Metacognitive Feedback",
+    "source": "Forbes",
+    "post_id": "urn:li:share:7484881688502648832",
+    "published_at": "2026-07-20T08:07:37.216636+00:00"
   }
 ]
