@@ -10,6 +10,7 @@ LinkedIn-friendly angles before passing to the content agent.
 """
 
 import logging
+import os
 import random
 from datetime import datetime, timezone
 
@@ -23,20 +24,32 @@ from config import settings
 logger = logging.getLogger(__name__)
 
 # ─── AI Relevance Keywords ─────────────────────────────────────────────────────
-HIGH_VALUE_KEYWORDS = [
-    "llm", "large language model", "gpt", "claude", "gemini", "llama",
-    "agent", "multimodal", "transformer", "fine-tun", "rag",
-    "retrieval", "reasoning", "benchmark", "open-source", "research",
-    "breakthrough", "launch", "release", "model", "dataset",
-    "alignment", "safety", "robotics", "automation", "arxiv",
-    "deepmind", "openai", "anthropic", "mistral", "hugging",
-    "diffusion", "embedding", "inference", "quantization", "lora",
-    "chain-of-thought", "vision", "speech", "agentic", "rlhf",
-    "code", "programming", "developer", "api", "deployment",
-    "computer vision", "pytorch", "tensorflow", "scikit-learn", "mlops",
-    "data engineering", "reinforcement learning", "ethics", "bias",
-    "tabular", "time series",
-]
+def _load_high_value_keywords() -> list:
+    keywords = []
+    filepath = os.path.join(os.path.dirname(__file__), "High_Value_keywords.txt")
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            for line in f:
+                # Remove inline comments and strip whitespace
+                line = line.split('#')[0].strip()
+                if not line:
+                    continue
+                # Process comma-separated values
+                parts = line.split(",")
+                for part in parts:
+                    clean_part = part.strip().strip('"').strip("'").lower()
+                    if clean_part:
+                        keywords.append(clean_part)
+    except Exception as e:
+        logger.error("Failed to load keywords from %s: %s", filepath, e)
+        # Minimal fallback list
+        return [
+            "llm", "large language model", "gpt", "claude", "gemini", "llama",
+            "agent", "multimodal", "transformer", "fine-tuning", "rag"
+        ]
+    return list(set(keywords))  # return unique keywords
+
+HIGH_VALUE_KEYWORDS = _load_high_value_keywords()
 
 # ─── 10 Rotating Fallback Topics (practitioner-focused) ───────────────────────
 FALLBACK_TOPICS = [

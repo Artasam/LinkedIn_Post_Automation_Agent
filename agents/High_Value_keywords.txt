@@ -1,0 +1,112 @@
+    # ── Core AI/ML/DL terms ──
+    "artificial intelligence", "machine learning", "deep learning", "neural network",
+    "supervised learning", "unsupervised learning", "self-supervised learning",
+    "semi-supervised learning", "reinforcement learning", "rlhf", "rlaif",
+    "transfer learning", "few-shot learning", "zero-shot learning", "meta-learning",
+    "representation learning", "generative model", "discriminative model",
+    "gradient descent", "backpropagation", "overfitting", "regularization",
+    "hyperparameter tuning", "feature engineering", "feature extraction",
+    "dimensionality reduction", "clustering", "classification", "regression",
+    "anomaly detection", "tabular", "time series", "forecasting",
+
+    # ── LLM & Generative AI specific ──
+    "llm", "large language model", "small language model", "slm",
+    "gpt", "chatgpt", "claude", "gemini", "llama", "mistral", "grok", "qwen",
+    "deepseek", "falcon", "phi", "command r", "mixtral",
+    "transformer", "attention mechanism", "self-attention", "encoder-decoder",
+    "fine-tun", "instruction tuning", "prompt engineering", "prompt injection",
+    "in-context learning", "chain-of-thought", "reasoning model", "test-time compute",
+    "rag", "retrieval augmented generation", "retrieval", "embedding", "vector database",
+    "vector search", "semantic search", "knowledge graph",
+    "diffusion", "diffusion model", "text-to-image", "text-to-video", "text-to-speech",
+    "image generation", "video generation", "audio generation", "music generation",
+    "multimodal", "vision-language model", "vlm", "world model",
+    "agent", "agentic", "ai agent", "autonomous agent", "multi-agent",
+    "tool use", "function calling", "orchestration", "mcp", "model context protocol",
+    "context window", "token", "tokenization", "hallucination",
+
+    # ── Model optimization & deployment ──
+    "quantization", "distillation", "knowledge distillation", "pruning",
+    "lora", "qlora", "peft", "parameter efficient", "adapter",
+    "inference", "inference optimization", "latency", "throughput",
+    "deployment", "serving", "edge ai", "on-device ai", "model compression",
+    "mixture of experts", "moe", "sparse model", "scaling laws",
+
+    # ── Architectures & core techniques ──
+    "cnn", "convolutional neural network", "rnn", "recurrent neural network",
+    "lstm", "gan", "generative adversarial network", "autoencoder",
+    "variational autoencoder", "vae", "graph neural network", "gnn",
+    "spiking neural network", "capsule network", "diffusion transformer",
+
+    # ── Subfields / applications ──
+    "computer vision", "object detection", "image segmentation", "image classification",
+    "facial recognition", "ocr", "speech recognition", "speech synthesis",
+    "natural language processing", "nlp", "natural language understanding",
+    "natural language generation", "sentiment analysis", "named entity recognition",
+    "machine translation", "text summarization", "question answering",
+    "robotics", "autonomous vehicles", "self-driving", "automation", "rpa",
+    "recommendation system", "search ranking", "fraud detection",
+    "drug discovery", "protein folding", "alphafold", "bioinformatics",
+    "synthetic data", "data labeling", "data annotation",
+
+    # ── Companies, labs & products ──
+    "openai", "anthropic", "deepmind", "google ai", "meta ai", "microsoft ai",
+    "mistral ai", "hugging face", "nvidia", "amd", "stability ai", "cohere",
+    "xai", "perplexity", "runway", "midjourney", "elevenlabs", "character ai",
+    "inflection ai", "adept", "scale ai", "databricks", "ibm watson",
+
+    # ── Tools, frameworks & infra ──
+    "pytorch", "tensorflow", "jax", "keras", "scikit-learn", "hugging face transformers",
+    "langchain", "llamaindex", "vllm", "onnx", "mlops", "llmops", "kubeflow",
+    "ray", "triton", "cuda", "tpu", "gpu cluster", "data engineering",
+    "feature store", "model registry", "vector store", "pinecone", "chroma", "faiss",
+
+    # ── Research, benchmarks & industry news ──
+    "arxiv", "research paper", "preprint", "benchmark", "leaderboard",
+    "open-source", "open weights", "state-of-the-art", "sota",
+    "breakthrough", "launch", "release", "model card", "paper", "dataset",
+    "training data", "pretraining", "post-training", "model architecture",
+
+    # ── Safety, ethics & governance ──
+    "alignment", "ai safety", "ai ethics", "responsible ai", "bias",
+    "fairness", "explainability", "interpretability", "transparency",
+    "ai governance", "ai regulation", "ai policy", "guardrails",
+    "red teaming", "jailbreak", "misuse", "deepfake", "misinformation",
+    "watermarking", "content moderation", "existential risk", "superintelligence",
+    "agi", "artificial general intelligence", "asi", "artificial superintelligence",
+
+    # ── Developer / general tech terms ──
+    "code", "programming", "developer", "api", "sdk", "software engineering",
+    "code generation", "copilot", "pair programming",
+
+    # ── Agent orchestration & LLM app frameworks ──
+    "langgraph", "langchain", "langsmith", "llamaindex", "crewai", "autogen",
+    "semantic kernel", "haystack", "dspy", "guardrails ai", "instructor",
+    "outlines", "griptape", "autogpt", "babyagi", "openai swarm",
+    "agentic workflow", "agent framework", "multi-agent orchestration",
+    "tool calling", "structured output", "function calling schema",
+
+    # ── Experiment tracking, MLOps & data infra ──
+    "mlflow", "weights & biases", "wandb", "comet ml", "neptune ai",
+    "dvc", "feast", "hopsworks", "feature store", "airflow", "dagster", "prefect",
+    "kubeflow", "sagemaker", "vertex ai", "azure ml", "databricks",
+    "spark", "pyspark", "yarn", "hadoop", "delta lake", "hudi", "iceberg",
+    "kafka", "flink", "data pipeline", "etl", "elt", "data versioning",
+    "model monitoring", "model registry", "ci/cd for ml", "llmops", "mlops",
+
+    # ── Model serving, vector stores & inference infra ──
+    "vllm", "tgi", "text generation inference", "triton inference server",
+    "onnx runtime", "tensorrt", "deepspeed", "accelerate", "bitsandbytes",
+    "ray serve", "bentoml", "kserve", "fastapi", "flask", "docker", "kubernetes",
+    "pinecone", "chroma", "faiss", "milvus", "weaviate", "qdrant", "redis vector",
+
+    # ── Classical ML / data science libraries ──
+    "numpy", "pandas", "scipy", "xgboost", "lightgbm", "catboost", "optuna",
+    "hyperopt", "spacy", "nltk", "opencv", "polars", "matplotlib", "seaborn",
+    "streamlit", "gradio", "jupyter",
+
+    # ── Robotics / ROS engineering stack ──
+    "ros", "ros2", "gazebo", "nav2", "navigation stack", "slam", "slam toolbox",
+    "rosbridge", "tf transform", "moveit", "urdf", "differential drive",
+    "path planning", "localization", "occupancy grid", "sensor fusion",
+    "lidar", "point cloud", "isaac sim", "webots"
