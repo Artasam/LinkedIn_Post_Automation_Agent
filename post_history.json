@@ -1,11 +1,5 @@
 [
   {
-    "title": "How Vision-Language Models Really Work",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7472171508568711169",
-    "published_at": "2026-06-15T06:21:54.691380+00:00"
-  },
-  {
     "title": "How to Protect Your AI Systems from Stolen Credential Attacks",
     "source": "Help Net Security",
     "post_id": "urn:li:share:7472534340787363841",
@@ -178,5 +172,11 @@
     "source": "News-Medical.Net",
     "post_id": "urn:li:share:7485908826714656768",
     "published_at": "2026-07-23T04:09:06.279726+00:00"
+  },
+  {
+    "title": "How AI Can Streamline Quality Control in Printing",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7486290130090094592",
+    "published_at": "2026-07-24T05:24:16.322458+00:00"
   }
 ]
