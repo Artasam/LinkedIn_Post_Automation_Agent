@@ -1,11 +1,5 @@
 [
   {
-    "title": "How Autonomous Cyber Agents Can Outsmart Sophisticated Attacks",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7472895275179757568",
-    "published_at": "2026-06-17T06:17:54.041351+00:00"
-  },
-  {
     "title": "Streamlining AI Decision-Making with Preference-Based Reinforcement Learning",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7473245039201042433",
@@ -178,5 +172,11 @@
     "source": "Github.com",
     "post_id": "urn:li:share:7487365021312880640",
     "published_at": "2026-07-27T04:35:29.936335+00:00"
+  },
+  {
+    "title": "How AI Can Improve Air Traffic Control Decision-Making",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7487588648511606784",
+    "published_at": "2026-07-27T19:24:07.345854+00:00"
   }
 ]
