@@ -9,6 +9,7 @@ LIVE-TESTED ENGINES (2026-03-17):
 ❌ Together AI       — HTTP 402 (credits required)
 ❌ Stability AI      — HTTP 402 (paid subscription required)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ ENGINE 0 — Gemini Imagen 3 : FREE tier via AI Studio, premium infographics
 ✅ ENGINE 1 — Pollinations AI: FREE, enhanced AI generated pictures
 ✅ ENGINE 2 — Pexels API     : FREE, 200 req/hr, professional tech photos
 ✅ ENGINE 3 — Unsplash API   : FREE, 50 req/hr, curated professional photos
@@ -104,6 +105,77 @@ def _save_to_temp(image_bytes: bytes, engine: str = "photo") -> Optional[str]:
     except OSError as exc:
         logger.error("Failed to save image: %s", exc)
         return None
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ENGINE 0 — Gemini Imagen 3 (FREE tier via AI Studio, premium infographics)
+# Get your free key: https://aistudio.google.com/
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _fetch_gemini_imagen(topic_title: str) -> Optional[str]:
+    """
+    Generate a high-quality infographic image using Google Gemini (Imagen 3).
+    Requires GEMINI_API_KEY from Google AI Studio.
+    """
+    api_key = getattr(settings, "GEMINI_API_KEY", "")
+    if not api_key:
+        logger.info("GEMINI_API_KEY not set — skipping Gemini Imagen engine.")
+        return None
+
+    try:
+        from google import genai
+        from google.genai import types
+    except ImportError:
+        logger.warning("google-genai not installed. Run: pip install google-genai")
+        return None
+
+    # Refine the topic into a strict infographic prompt
+    infographic_prompt = (
+        f"Create a professional, minimalist LinkedIn infographic about: {topic_title}. "
+        "Aspect ratio 1:1. Use a cohesive, premium blue and gray corporate color palette. "
+        "Include a clean main title and 3 precise bullet points or statistics with minimal icons. "
+        "The text must be highly legible and free of spelling errors."
+    )
+
+    try:
+        logger.info("Gemini Imagen 3: generating infographic for '%s'…", topic_title[:50])
+        client = genai.Client(api_key=api_key)
+        
+        response = client.models.generate_images(
+            model='imagen-3.0-generate-002', 
+            prompt=infographic_prompt,
+            config=types.GenerateImagesConfig(
+                number_of_images=1,
+                output_mime_type='image/jpeg',
+                aspect_ratio='1:1'
+            )
+        )
+        
+        if not response.generated_images:
+            logger.warning("Gemini returned no images.")
+            return None
+            
+        image = response.generated_images[0].image
+        
+        # Save Pillow image to temp file
+        import tempfile
+        tmp = tempfile.NamedTemporaryFile(
+            suffix=".jpg",
+            delete=False,
+            prefix="linkedin_ai_gemini_",
+        )
+        image.save(tmp.name, format="JPEG")
+        tmp.close()
+        
+        # Log size
+        size_kb = os.path.getsize(tmp.name) // 1024
+        logger.info("[GEMINI] Image saved: %s (%d KB)", tmp.name, size_kb)
+        return tmp.name
+        
+    except Exception as exc:
+        logger.warning("Gemini Imagen 3 request failed: %s", exc)
+
+    return None
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -577,6 +649,7 @@ def generate_image(topic_title: str) -> Optional[str]:
     Fetch or generate a professional LinkedIn header image for the given topic.
 
     Engine waterfall (all live-tested 2026-03-17):
+      0. Gemini Imagen 3 — FREE tier via AI Studio, needs GEMINI_API_KEY
       1. Pollinations AI — FREE, enhanced AI generated pictures, no key needed
       2. Pexels API      — FREE, professional photos, needs PEXELS_API_KEY
       3. Unsplash API    — FREE, curated photos,      needs UNSPLASH_ACCESS_KEY
@@ -587,6 +660,13 @@ def generate_image(topic_title: str) -> Optional[str]:
         None → pipeline publishes post as text-only (never crashes).
     """
     logger.info("Image generation started for topic: '%s'", topic_title[:80])
+
+    # Engine 0: Gemini Imagen 3
+    logger.info("Trying Engine 0: Gemini Imagen 3 (FREE premium infographics)…")
+    result = _fetch_gemini_imagen(topic_title)
+    if result:
+        logger.info("✅ Engine 0 (Gemini) succeeded.")
+        return result
 
     # Engine 1: Pollinations AI
     logger.info("Trying Engine 1: Pollinations AI (FREE AI generated photos)…")

@@ -12,4 +12,4 @@ feedparser
 python-dotenv
 
 Pillow
-
+google-genai

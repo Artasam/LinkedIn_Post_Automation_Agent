@@ -57,10 +57,12 @@ ENABLE_LLM_MODERATION: bool = os.getenv("ENABLE_LLM_MODERATION", "true").lower()
 
 # ─── Image Generation ─────────────────────────────────────────────────────────
 # Engine waterfall (all live-tested 2026-03-17):
+#   0. Gemini Imagen 3 — FREE tier via AI Studio, needs GEMINI_API_KEY
 #   1. Pexels API    — FREE, 200 req/hr, needs PEXELS_API_KEY
 #   2. Unsplash API  — FREE, 50 req/hr,  needs UNSPLASH_ACCESS_KEY
 #   3. SVG Generator — FREE, always works, no key needed (guaranteed fallback)
 ENABLE_IMAGE_GENERATION: bool = os.getenv("ENABLE_IMAGE_GENERATION", "false").lower() == "true"
+GEMINI_API_KEY:     str = os.getenv("GEMINI_API_KEY", "")
 PEXELS_API_KEY:     str = os.getenv("PEXELS_API_KEY", "")
 UNSPLASH_ACCESS_KEY: str = os.getenv("UNSPLASH_ACCESS_KEY", "")
 
