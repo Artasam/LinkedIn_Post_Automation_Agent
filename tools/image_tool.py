@@ -108,18 +108,24 @@ def _save_to_temp(image_bytes: bytes, engine: str = "photo") -> Optional[str]:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# ENGINE 0 — Gemini Imagen 3 (FREE tier via AI Studio, premium infographics)
+# ENGINE 0 — Gemini Flash Image (FREE tier via AI Studio, premium infographics)
+# Model: gemini-2.0-flash-preview-image-generation
 # Get your free key: https://aistudio.google.com/
 # ══════════════════════════════════════════════════════════════════════════════
 
 def _fetch_gemini_imagen(topic_title: str) -> Optional[str]:
     """
-    Generate a high-quality infographic image using Google Gemini (Imagen 3).
-    Requires GEMINI_API_KEY from Google AI Studio.
+    Generate a high-quality infographic image using Gemini Flash Image.
+
+    Uses gemini-2.0-flash-preview-image-generation via generate_content(),
+    which is the correct free-tier approach (the old generate_images() +
+    imagen-3.0-generate-002 are deprecated and unavailable on the free API).
+
+    Requires GEMINI_API_KEY from Google AI Studio (free at aistudio.google.com).
     """
     api_key = getattr(settings, "GEMINI_API_KEY", "")
     if not api_key:
-        logger.info("GEMINI_API_KEY not set — skipping Gemini Imagen engine.")
+        logger.info("GEMINI_API_KEY not set — skipping Gemini engine.")
         return None
 
     try:
@@ -129,53 +135,44 @@ def _fetch_gemini_imagen(topic_title: str) -> Optional[str]:
         logger.warning("google-genai not installed. Run: pip install google-genai")
         return None
 
-    # Refine the topic into a strict infographic prompt
     infographic_prompt = (
         f"Create a professional, minimalist LinkedIn infographic about: {topic_title}. "
-        "Aspect ratio 1:1. Use a cohesive, premium blue and gray corporate color palette. "
-        "Include a clean main title and 3 precise bullet points or statistics with minimal icons. "
-        "The text must be highly legible and free of spelling errors."
+        "Use a premium blue and gray corporate color palette. "
+        "Include a clear main title, 3 bullet points with key insights, and minimal icons. "
+        "Make the text highly legible with clean typography."
     )
 
+
     try:
-        logger.info("Gemini Imagen 3: generating infographic for '%s'…", topic_title[:50])
+        logger.info("Gemini Flash Image: generating infographic for '%s'…", topic_title[:50])
         client = genai.Client(api_key=api_key)
-        
-        response = client.models.generate_images(
-            model='imagen-3.0-generate-002', 
-            prompt=infographic_prompt,
-            config=types.GenerateImagesConfig(
-                number_of_images=1,
-                output_mime_type='image/jpeg',
-                aspect_ratio='1:1'
-            )
+
+        response = client.models.generate_content(
+            model="gemini-2.5-flash-image",
+            contents=infographic_prompt,
+            config=types.GenerateContentConfig(
+                response_modalities=["IMAGE", "TEXT"],
+            ),
         )
-        
-        if not response.generated_images:
-            logger.warning("Gemini returned no images.")
+
+        # Extract raw image bytes from the response parts
+        image_data = None
+        for part in response.candidates[0].content.parts:
+            if part.inline_data and part.inline_data.mime_type.startswith("image/"):
+                image_data = part.inline_data.data
+                break
+
+        if not image_data:
+            logger.warning("Gemini returned no image data in response parts.")
             return None
-            
-        image = response.generated_images[0].image
-        
-        # Save Pillow image to temp file
-        import tempfile
-        tmp = tempfile.NamedTemporaryFile(
-            suffix=".jpg",
-            delete=False,
-            prefix="linkedin_ai_gemini_",
-        )
-        image.save(tmp.name, format="JPEG")
-        tmp.close()
-        
-        # Log size
-        size_kb = os.path.getsize(tmp.name) // 1024
-        logger.info("[GEMINI] Image saved: %s (%d KB)", tmp.name, size_kb)
-        return tmp.name
-        
+
+        return _save_to_temp(image_data, engine="gemini")
+
     except Exception as exc:
-        logger.warning("Gemini Imagen 3 request failed: %s", exc)
+        logger.warning("Gemini image generation failed: %s", exc)
 
     return None
+
 
 
 # ══════════════════════════════════════════════════════════════════════════════
