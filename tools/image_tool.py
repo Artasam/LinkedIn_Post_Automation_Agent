@@ -1,31 +1,36 @@
 """
 tools/image_tool.py
 -------------------
-Professional Image Fetcher for LinkedIn Posts.
+Professional Image Fetcher & Generator for LinkedIn Posts.
 
-LIVE-TESTED ENGINES (2026-03-17):
+UPDATED ENGINES (2026-07-27):
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-❌ HuggingFace FLUX  — HTTP 410 (models moved to paid tier)
-❌ Together AI       — HTTP 402 (credits required)
-❌ Stability AI      — HTTP 402 (paid subscription required)
+❌ HuggingFace FLUX       — HTTP 410 (models moved to paid tier)
+❌ Together AI            — HTTP 402 (credits required)
+❌ Stability AI           — HTTP 402 (paid subscription required)
+❌ imagen-3.0-generate-002 — HTTP 404 (restricted to paid Vertex AI only)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ ENGINE 0 — Gemini Imagen 3 : FREE tier via AI Studio, premium infographics
-✅ ENGINE 1 — Pollinations AI: FREE, enhanced AI generated pictures
-✅ ENGINE 2 — Pexels API     : FREE, 200 req/hr, professional tech photos
-✅ ENGINE 3 — Unsplash API   : FREE, 50 req/hr, curated professional photos
-✅ ENGINE 4 — SVG Generator  : ALWAYS works, no network needed, branded visuals
+✅ ENGINE 0 — Gemini 2.5 Flash Image : FREE via AI Studio, AI infographics
+✅ ENGINE 1 — Pollinations AI        : FREE, enhanced AI generated pictures
+✅ ENGINE 2 — Pexels API             : FREE, 200 req/hr, professional photos
+✅ ENGINE 3 — Unsplash API           : FREE, 50 req/hr, curated photos
+✅ ENGINE 4 — SVG Generator          : ALWAYS works, no network, branded visuals
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-WHY THESE THREE:
+ENGINE DESCRIPTIONS:
+  Gemini   — Google's latest multimodal model generates bespoke AI infographics
+             that align with the post topic. Uses generate_content() API.
   Pexels   — Real professional photography, free API, 200 req/hr limit,
-             searches by keyword to find relevant tech/AI imagery
+             searches by keyword to find relevant tech/AI imagery.
   Unsplash — Curated high-quality photos, free API, 50 req/hr limit,
-             perfect for technology and abstract professional images
+             perfect for technology and abstract professional images.
   SVG      — Pure Python, zero dependencies, zero network, always works.
              Generates a clean branded LinkedIn header with topic title,
              gradient background, and subtle AI-themed design elements.
 
 SETUP:
+  Engine 0 (Gemini):       Get free key at https://aistudio.google.com/
+                           Set GEMINI_API_KEY in .env
   Engine 1 (Pollinations): No key needed — free AI generation
   Engine 2 (Pexels):       Get free key at https://www.pexels.com/api/
                            Set PEXELS_API_KEY in .env
@@ -109,7 +114,7 @@ def _save_to_temp(image_bytes: bytes, engine: str = "photo") -> Optional[str]:
 
 # ══════════════════════════════════════════════════════════════════════════════
 # ENGINE 0 — Gemini Flash Image (FREE tier via AI Studio, premium infographics)
-# Model: gemini-2.0-flash-preview-image-generation
+# Model: gemini-2.5-flash-image
 # Get your free key: https://aistudio.google.com/
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -117,7 +122,7 @@ def _fetch_gemini_imagen(topic_title: str) -> Optional[str]:
     """
     Generate a high-quality infographic image using Gemini Flash Image.
 
-    Uses gemini-2.0-flash-preview-image-generation via generate_content(),
+    Uses gemini-2.5-flash-image via generate_content(),
     which is the correct free-tier approach (the old generate_images() +
     imagen-3.0-generate-002 are deprecated and unavailable on the free API).
 
@@ -645,12 +650,12 @@ def generate_image(topic_title: str) -> Optional[str]:
     """
     Fetch or generate a professional LinkedIn header image for the given topic.
 
-    Engine waterfall (all live-tested 2026-03-17):
-      0. Gemini Imagen 3 — FREE tier via AI Studio, needs GEMINI_API_KEY
-      1. Pollinations AI — FREE, enhanced AI generated pictures, no key needed
-      2. Pexels API      — FREE, professional photos, needs PEXELS_API_KEY
-      3. Unsplash API    — FREE, curated photos,      needs UNSPLASH_ACCESS_KEY
-      4. SVG Engine      — FREE, always works,        no key needed
+    Engine waterfall (updated 2026-07-27):
+      0. Gemini 2.5 Flash Image — FREE via AI Studio, AI infographics, needs GEMINI_API_KEY
+      1. Pollinations AI        — FREE, AI generated pictures, no key needed
+      2. Pexels API             — FREE, professional photos, needs PEXELS_API_KEY
+      3. Unsplash API           — FREE, curated photos, needs UNSPLASH_ACCESS_KEY
+      4. SVG Engine             — FREE, always works, no key needed
 
     Returns:
         Absolute path to the image file (jpg or svg), or None if all fail.
@@ -658,8 +663,8 @@ def generate_image(topic_title: str) -> Optional[str]:
     """
     logger.info("Image generation started for topic: '%s'", topic_title[:80])
 
-    # Engine 0: Gemini Imagen 3
-    logger.info("Trying Engine 0: Gemini Imagen 3 (FREE premium infographics)…")
+    # Engine 0: Gemini Flash Image
+    logger.info("Trying Engine 0: Gemini 2.5 Flash Image (FREE AI infographics)…")
     result = _fetch_gemini_imagen(topic_title)
     if result:
         logger.info("✅ Engine 0 (Gemini) succeeded.")

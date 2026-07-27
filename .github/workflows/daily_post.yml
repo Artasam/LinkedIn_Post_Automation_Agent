@@ -113,6 +113,7 @@ jobs:
           LINKEDIN_PERSON_ID:    ${{ secrets.LINKEDIN_PERSON_ID }}
 
           # Image generation — free APIs (SVG fallback always active)
+          GEMINI_API_KEY:        ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY:        ${{ secrets.PEXELS_API_KEY }}
           UNSPLASH_ACCESS_KEY:   ${{ secrets.UNSPLASH_ACCESS_KEY }}
           ENABLE_IMAGE_GENERATION: "true"

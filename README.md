@@ -127,6 +127,7 @@ This project is a **production-ready multi-agent AI system** that runs fully on 
                         │   NODE 5: generate_image    │
                         │   tools/image_tool.py       │
                         │                             │
+                        │  Engine 0: Gemini 2.5 Flash │
                         │  Engine 1: Pollinations AI  │
                         │  Engine 2: Pexels API       │
                         │  Engine 3: Unsplash API     │
@@ -245,7 +246,7 @@ score = 0.5 × keyword_score  (38 AI keywords)
 
 All engines **live-tested and verified working** (2026-03-17).
 
-### Removed Engines (failed live testing)
+### Removed / Failed Engines
 
 | Engine | Status | Reason |
 |--------|--------|--------|
@@ -253,21 +254,23 @@ All engines **live-tested and verified working** (2026-03-17).
 | HuggingFace FLUX.1-schnell | ❌ Removed | HTTP 410 — moved to paid tier |
 | Together AI | ❌ Removed | HTTP 402 — credits required |
 | Stability AI | ❌ Removed | HTTP 402 — paid subscription |
+| `imagen-3.0-generate-002` | ❌ Removed | HTTP 404 — restricted to paid Vertex AI |
 
 ### Current Engines (working)
 
 | # | Engine | Cost | Key | Quality |
 |---|--------|------|-----|---------|
+| 0 | **Gemini 2.5 Flash Image** | Free (AI Studio) | `GEMINI_API_KEY` | AI-generated infographics aligned to post topic |
 | 1 | **Pollinations AI** | Always free | None needed | Enhanced AI generated pictures |
 | 2 | **Pexels API** | Free 200 req/hr | `PEXELS_API_KEY` | Professional photography |
 | 3 | **Unsplash API** | Free 50 req/hr | `UNSPLASH_ACCESS_KEY` | Curated professional photos |
 | 4 | **SVG Generator** | Always free | None needed | Clean branded header |
 
-**Waterfall:** Pollinations AI → Pexels → Unsplash → SVG. The SVG engine is pure Python (no network, no key) so **images are always generated** — the post is never text-only due to image failure.
+**Waterfall:** Gemini → Pollinations AI → Pexels → Unsplash → SVG. The SVG engine is pure Python (no network, no key) so **images are always generated** — the post is never text-only due to image failure.
 
 ### Getting Free API Keys
 
-**Pexels** (recommended first):
+**Pexels** (recommended):
 1. Go to [https://www.pexels.com/api/](https://www.pexels.com/api/)
 2. Click **Get Started** → free signup
 3. Copy your API key → add `PEXELS_API_KEY=your_key` to `.env`
@@ -276,6 +279,11 @@ All engines **live-tested and verified working** (2026-03-17).
 1. Go to [https://unsplash.com/developers](https://unsplash.com/developers)
 2. Click **Register as a developer** → create app
 3. Copy your Access Key → add `UNSPLASH_ACCESS_KEY=your_key` to `.env`
+
+**Google AI Studio (Gemini — top-priority engine):**
+1. Go to [https://aistudio.google.com/](https://aistudio.google.com/)
+2. Click **Get API key** → create a free key
+3. Copy your key → add `GEMINI_API_KEY=your_key` to `.env`
 
 ---
 
@@ -436,8 +444,9 @@ Copy the `sub` field → `LINKEDIN_PERSON_ID=abc123XYZ`
 | `GROQ_API_KEY` | ✅ | Groq API key |
 | `LINKEDIN_ACCESS_TOKEN` | ✅ | LinkedIn OAuth token (expires 60 days) |
 | `LINKEDIN_PERSON_ID` | ✅ | LinkedIn profile `sub` field |
-| `PEXELS_API_KEY` | Recommended | Free photos — pexels.com/api |
-| `UNSPLASH_ACCESS_KEY` | Recommended | Free photos — unsplash.com/developers |
+| `GEMINI_API_KEY` | Recommended | Free AI infographic generation — aistudio.google.com |
+| `PEXELS_API_KEY` | Optional | Free photos — pexels.com/api |
+| `UNSPLASH_ACCESS_KEY` | Optional | Free photos — unsplash.com/developers |
 | `NEWS_API_KEY` | Optional | 100 req/day — newsapi.org |
 
 
@@ -520,9 +529,10 @@ MULTI_TOPIC_DRAFTS=1         # Set to 3 for multi-draft best-of selection
 
 # ── IMAGE GENERATION ─────────────────────────────────────────────────────────
 ENABLE_IMAGE_GENERATION=true    # Recommended: true (SVG always works as fallback)
-PEXELS_API_KEY=                 # Free — pexels.com/api (Engine 1)
-UNSPLASH_ACCESS_KEY=            # Free — unsplash.com/developers (Engine 2)
-# Engine 3 (SVG) needs no key — always works
+GEMINI_API_KEY=                 # Free — aistudio.google.com (Engine 0, top priority)
+PEXELS_API_KEY=                 # Free — pexels.com/api (Engine 2)
+UNSPLASH_ACCESS_KEY=            # Free — unsplash.com/developers (Engine 3)
+# Engine 4 (SVG) needs no key — always works
 
 # ── LOGGING ───────────────────────────────────────────────────────────────────
 LOG_LEVEL=INFO
