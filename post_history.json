@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Protect Your AI Systems from Stolen Credential Attacks",
-    "source": "Help Net Security",
-    "post_id": "urn:li:share:7472534340787363841",
-    "published_at": "2026-06-16T06:23:40.599259+00:00"
-  },
-  {
     "title": "How Autonomous Cyber Agents Can Outsmart Sophisticated Attacks",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7472895275179757568",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7486290130090094592",
     "published_at": "2026-07-24T05:24:16.322458+00:00"
+  },
+  {
+    "title": "What It Takes to Run Large Language Models on Tiny Devices",
+    "source": "Github.com",
+    "post_id": "urn:li:share:7487365021312880640",
+    "published_at": "2026-07-27T04:35:29.936335+00:00"
   }
 ]
