@@ -1,11 +1,5 @@
 [
   {
-    "title": "Streamlining AI Decision-Making with Preference-Based Reinforcement Learning",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7473245039201042433",
-    "published_at": "2026-06-18T05:27:44.283191+00:00"
-  },
-  {
     "title": "How to Stress Test Your Large Language Models for Real-World Robustness",
     "source": "GitHub Trending",
     "post_id": "urn:li:share:7473633897298407424",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7487588648511606784",
     "published_at": "2026-07-27T19:24:07.345854+00:00"
+  },
+  {
+    "title": "How AI Agents Can Learn from Permanent Memory",
+    "source": "GitHub",
+    "post_id": "urn:li:share:7487717016536039424",
+    "published_at": "2026-07-28T03:54:12.602478+00:00"
   }
 ]
