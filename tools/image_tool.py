@@ -470,250 +470,51 @@ def _fetch_pollinations(topic_title: str) -> Optional[str]:
     return None
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# ENGINE 4 — SVG Generator (ALWAYS WORKS — no network, no key, pure Python)
-# Generates a clean branded LinkedIn header with the topic title.
-# ══════════════════════════════════════════════════════════════════════════════
-
-def _generate_svg(topic_title: str) -> Optional[str]:
-    """
-    Generate a clean, professional SVG LinkedIn header image.
-
-    Pure Python — no network call, no API key, no credits.
-    Always succeeds as the guaranteed final fallback.
-
-    Produces a 1216×684 PNG-equivalent SVG with:
-      - Dark gradient background (navy → dark blue)
-      - Subtle animated dot-grid pattern (AI/tech aesthetic)
-      - Clean white topic title text
-      - Glowing accent line
-      - "AI Insights" branding label
-    """
-    # Truncate title to fit cleanly
-    title = topic_title.strip()
-    if len(title) > 60:
-        # Break into two lines at nearest space
-        midpoint = len(title) // 2
-        space_idx = title.rfind(" ", 0, midpoint + 15)
-        if space_idx > 0:
-            line1 = title[:space_idx]
-            line2 = title[space_idx + 1:]
-        else:
-            line1 = title[:55] + "..."
-            line2 = ""
-    else:
-        line1 = title
-        line2 = ""
-
-    # Build SVG
-    svg = f"""<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1216" height="684" viewBox="0 0 1216 684">
-  <defs>
-    <!-- Dark gradient background -->
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%"   stop-color="#0a0e1a"/>
-      <stop offset="50%"  stop-color="#0d1b2e"/>
-      <stop offset="100%" stop-color="#091524"/>
-    </linearGradient>
-    <!-- Accent glow -->
-    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%"   stop-color="#1e90ff" stop-opacity="0"/>
-      <stop offset="30%"  stop-color="#00bfff"  stop-opacity="1"/>
-      <stop offset="70%"  stop-color="#1e90ff"  stop-opacity="1"/>
-      <stop offset="100%" stop-color="#1e90ff" stop-opacity="0"/>
-    </linearGradient>
-    <!-- Node glow filter -->
-    <filter id="nodeGlow">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <!-- Text glow -->
-    <filter id="textGlow">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-  </defs>
-
-  <!-- Background -->
-  <rect width="1216" height="684" fill="url(#bg)"/>
-
-  <!-- Subtle dot grid pattern -->
-  <g opacity="0.12">
-    {''.join(
-        f'<circle cx="{x}" cy="{y}" r="1.2" fill="#4a9eff"/>'
-        for x in range(40, 1180, 55)
-        for y in range(40, 650, 55)
-    )}
-  </g>
-
-  <!-- Network connection lines (subtle) -->
-  <g stroke="#1e90ff" stroke-width="0.5" opacity="0.08">
-    <line x1="100"  y1="150"  x2="350"  y2="280"/>
-    <line x1="350"  y1="280"  x2="600"  y2="180"/>
-    <line x1="600"  y1="180"  x2="850"  y2="320"/>
-    <line x1="850"  y1="320"  x2="1100" y2="200"/>
-    <line x1="200"  y1="450"  x2="480"  y2="380"/>
-    <line x1="480"  y1="380"  x2="730"  y2="480"/>
-    <line x1="730"  y1="480"  x2="980"  y2="390"/>
-    <line x1="350"  y1="280"  x2="480"  y2="380"/>
-    <line x1="600"  y1="180"  x2="730"  y2="480"/>
-    <line x1="850"  y1="320"  x2="980"  y2="390"/>
-  </g>
-
-  <!-- Network nodes -->
-  <g filter="url(#nodeGlow)">
-    <circle cx="100"  cy="150"  r="4" fill="#00bfff" opacity="0.7"/>
-    <circle cx="350"  cy="280"  r="6" fill="#1e90ff" opacity="0.9"/>
-    <circle cx="600"  cy="180"  r="5" fill="#00bfff" opacity="0.8"/>
-    <circle cx="850"  cy="320"  r="7" fill="#1e90ff" opacity="0.9"/>
-    <circle cx="1100" cy="200"  r="4" fill="#00bfff" opacity="0.7"/>
-    <circle cx="200"  cy="450"  r="4" fill="#7b68ee" opacity="0.7"/>
-    <circle cx="480"  cy="380"  r="6" fill="#9370db" opacity="0.8"/>
-    <circle cx="730"  cy="480"  r="5" fill="#7b68ee" opacity="0.7"/>
-    <circle cx="980"  cy="390"  r="6" fill="#9370db" opacity="0.8"/>
-  </g>
-
-  <!-- Glowing horizontal accent bar -->
-  <rect x="0" y="330" width="1216" height="2" fill="url(#glow)" opacity="0.6"/>
-
-  <!-- Branding label -->
-  <rect x="48" y="44" width="130" height="32" rx="4"
-        fill="#1e90ff" fill-opacity="0.15"
-        stroke="#1e90ff" stroke-width="1" stroke-opacity="0.5"/>
-  <text x="113" y="65"
-        font-family="'Segoe UI', Arial, sans-serif"
-        font-size="13" font-weight="600" letter-spacing="2"
-        fill="#4ab8ff" text-anchor="middle">AI INSIGHTS</text>
-
-  <!-- Main title - line 1 -->
-  <text x="608" y="{320 if line2 else 345}"
-        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
-        font-size="{44 if len(line1) < 40 else 36}"
-        font-weight="700"
-        fill="#ffffff"
-        text-anchor="middle"
-        filter="url(#textGlow)"
-        letter-spacing="-0.5">{line1}</text>
-
-  {"" if not line2 else f'''  <!-- Main title - line 2 -->
-  <text x="608" y="375"
-        font-family="&apos;Segoe UI&apos;, &apos;Helvetica Neue&apos;, Arial, sans-serif"
-        font-size="{36 if len(line2) < 40 else 30}"
-        font-weight="700"
-        fill="#ffffff"
-        text-anchor="middle"
-        filter="url(#textGlow)"
-        letter-spacing="-0.5">{line2}</text>'''}
-
-  <!-- Subtitle line -->
-  <text x="608" y="{"430" if line2 else "400"}"
-        font-family="'Segoe UI', Arial, sans-serif"
-        font-size="18" font-weight="400"
-        fill="#7eb8e8" text-anchor="middle" letter-spacing="1">
-    Artificial Intelligence  ·  Machine Learning  ·  Research
-  </text>
-
-  <!-- Bottom accent dots -->
-  <g fill="#1e90ff" opacity="0.5">
-    <circle cx="548" cy="460" r="3"/>
-    <circle cx="568" cy="460" r="3"/>
-    <circle cx="588" cy="460" r="3"/>
-    <circle cx="608" cy="460" r="5" fill="#00bfff" opacity="0.8"/>
-    <circle cx="628" cy="460" r="3"/>
-    <circle cx="648" cy="460" r="3"/>
-    <circle cx="668" cy="460" r="3"/>
-  </g>
-</svg>"""
-
-    # Save as SVG file (LinkedIn accepts SVG via image upload)
-    try:
-        tmp = tempfile.NamedTemporaryFile(
-            suffix=".svg",
-            delete=False,
-            prefix="linkedin_ai_svg_",
-        )
-        tmp.write(svg.encode("utf-8"))
-        tmp.close()
-        size_kb = len(svg.encode("utf-8")) // 1024
-        logger.info("[SVG] Header image generated: %s (%d KB)", tmp.name, size_kb)
-        return tmp.name
-    except OSError as exc:
-        logger.error("Failed to save SVG: %s", exc)
-        return None
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# PUBLIC API
-# ══════════════════════════════════════════════════════════════════════════════
-
-def generate_image(topic_title: str, topic_summary: str = "") -> Optional[str]:
+def generate_image(topic_title: str) -> Optional[str]:
     """
     Fetch or generate a professional LinkedIn header image for the given topic.
 
     Engine waterfall (updated):
-      0. Dynamic Infographic    - HTML templates / Mermaid via Groq LLM (openai/gpt-oss-120b)
-      1. Gemini 2.5 Flash Image — FREE via AI Studio, AI infographics, needs GEMINI_API_KEY
-      2. Pollinations AI        — FREE, AI generated pictures, no key needed
-      3. Pexels API             — FREE, professional photos, needs PEXELS_API_KEY
-      4. Unsplash API           — FREE, curated photos, needs UNSPLASH_ACCESS_KEY
-      5. SVG Engine             — FREE, always works, no key needed
+      0. Gemini 2.5 Flash Image — FREE via AI Studio, AI infographics, needs GEMINI_API_KEY
+      1. Pollinations AI        — FREE, AI generated pictures, no key needed
+      2. Pexels API             — FREE, professional photos, needs PEXELS_API_KEY
+      3. Unsplash API           — FREE, curated photos, needs UNSPLASH_ACCESS_KEY
 
     Returns:
-        Absolute path to the image file (jpg or svg), or None if all fail.
+        Absolute path to the image file (jpg), or None if all fail.
         None → pipeline publishes post as text-only (never crashes).
     """
     logger.info("Image generation started for topic: '%s'", topic_title[:80])
 
-    # Engine 0: Dynamic Infographics (Mermaid / HTML templates)
-    logger.info("Trying Engine 0: Dynamic Infographic (Mermaid/HTML)…")
-    try:
-        from tools.infographic_engine import generate_dynamic_infographic
-        result = generate_dynamic_infographic(topic_title, topic_summary)
-        if result:
-            logger.info("✅ Engine 0 (Dynamic Infographic) succeeded.")
-            return result
-    except ImportError:
-        logger.info("infographic_engine not available — skipping Engine 0.")
-    except Exception as exc:
-        logger.warning("Engine 0 failed: %s", exc)
-
-    # Engine 1: Gemini Flash Image
-    logger.info("Trying Engine 1: Gemini 2.5 Flash Image (FREE AI infographics)…")
+    # Engine 0: Gemini Flash Image
+    logger.info("Trying Engine 0: Gemini 2.5 Flash Image (FREE AI infographics)…")
     result = _fetch_gemini_imagen(topic_title)
     if result:
-        logger.info("✅ Engine 1 (Gemini) succeeded.")
+        logger.info("✅ Engine 0 (Gemini) succeeded.")
         return result
 
-    # Engine 2: Pollinations AI
-    logger.info("Trying Engine 2: Pollinations AI (FREE AI generated photos)…")
+    # Engine 1: Pollinations AI
+    logger.info("Trying Engine 1: Pollinations AI (FREE AI generated photos)…")
     result = _fetch_pollinations(topic_title)
     if result:
-        logger.info("✅ Engine 2 (Pollinations AI) succeeded.")
+        logger.info("✅ Engine 1 (Pollinations AI) succeeded.")
         return result
 
-    # Engine 3: Pexels
-    logger.info("Trying Engine 3: Pexels API (FREE professional photos)…")
+    # Engine 2: Pexels
+    logger.info("Trying Engine 2: Pexels API (FREE professional photos)…")
     result = _fetch_pexels(topic_title)
     if result:
-        logger.info("✅ Engine 3 (Pexels) succeeded.")
+        logger.info("✅ Engine 2 (Pexels) succeeded.")
         return result
 
-    # Engine 4: Unsplash
-    logger.info("Trying Engine 4: Unsplash API (FREE curated photos)…")
+    # Engine 3: Unsplash
+    logger.info("Trying Engine 3: Unsplash API (FREE curated photos)…")
     result = _fetch_unsplash(topic_title)
     if result:
-        logger.info("✅ Engine 4 (Unsplash) succeeded.")
+        logger.info("✅ Engine 3 (Unsplash) succeeded.")
         return result
 
-    # Engine 5: SVG — always works
-    logger.info("Trying Engine 5: SVG Generator (no network required)…")
-    result = _generate_svg(topic_title)
-    if result:
-        logger.info("✅ Engine 5 (SVG) succeeded.")
-        return result
-
-    # Should never reach here since SVG always works
-    logger.error("❌ All image engines failed (SVG should never fail).")
+    logger.error("❌ All image engines failed.")
     return None
 
 

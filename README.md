@@ -46,7 +46,7 @@ This project is a **production-ready multi-agent AI system** that runs fully on 
 5. Uses **Llama 3.3 70B Versatile** via Groq to select and write a compelling post
 6. Generates a professional, engagement-optimised post (max **300 words**)
 7. Adds **3–5** contextual AI hashtags
-8. Attaches a **professional image** via Pollinations AI → Pexels → Unsplash → SVG fallback
+8. Attaches a **professional image** via Gemini → Pollinations AI → Pexels → Unsplash
 9. Publishes to LinkedIn via the official **API v2**
 10. Runs automatically every Monday–Friday at **peak engagement hours** via GitHub Actions
 
@@ -131,8 +131,6 @@ This project is a **production-ready multi-agent AI system** that runs fully on 
                         │  Engine 1: Pollinations AI  │
                         │  Engine 2: Pexels API       │
                         │  Engine 3: Unsplash API     │
-                        │  Engine 4: SVG Generator    │
-                        │  (SVG always succeeds)      │
                         └─────────────┬───────────────┘
                                       │
                         ┌─────────────▼─────────────┐
@@ -264,9 +262,8 @@ All engines **live-tested and verified working** (2026-03-17).
 | 1 | **Pollinations AI** | Always free | None needed | Enhanced AI generated pictures |
 | 2 | **Pexels API** | Free 200 req/hr | `PEXELS_API_KEY` | Professional photography |
 | 3 | **Unsplash API** | Free 50 req/hr | `UNSPLASH_ACCESS_KEY` | Curated professional photos |
-| 4 | **SVG Generator** | Always free | None needed | Clean branded header |
 
-**Waterfall:** Gemini → Pollinations AI → Pexels → Unsplash → SVG. The SVG engine is pure Python (no network, no key) so **images are always generated** — the post is never text-only due to image failure.
+**Waterfall:** Gemini → Pollinations AI → Pexels → Unsplash.
 
 ### Getting Free API Keys
 
@@ -341,7 +338,7 @@ linkedin-ai-agent/
 | Workflow | LangGraph `StateGraph` |
 | News Sources | ArXiv XML · HackerNews Algolia · GitHub REST · NewsAPI · Wikipedia · DuckDuckGo |
 | Post History | `history_tool.py` — JSON file, 60% word-overlap similarity |
-| Images | Pexels REST · Unsplash REST · SVG Generator (Python) |
+| Images | Pexels REST · Unsplash REST |
 | LinkedIn API | REST v2 — `ugcPosts`, version `202304` |
 | Automation | GitHub Actions — cron `0 9 * * *` |
 
@@ -532,7 +529,6 @@ ENABLE_IMAGE_GENERATION=true    # Recommended: true (SVG always works as fallbac
 GEMINI_API_KEY=                 # Free — aistudio.google.com (Engine 0, top priority)
 PEXELS_API_KEY=                 # Free — pexels.com/api (Engine 2)
 UNSPLASH_ACCESS_KEY=            # Free — unsplash.com/developers (Engine 3)
-# Engine 4 (SVG) needs no key — always works
 
 # ── LOGGING ───────────────────────────────────────────────────────────────────
 LOG_LEVEL=INFO
@@ -639,7 +635,6 @@ Set `ENABLE_IMAGE_GENERATION=true` and add at least one key:
 ENABLE_IMAGE_GENERATION=true
 PEXELS_API_KEY=your_free_key   # pexels.com/api — free signup
 ```
-If no keys are set, the SVG engine generates a branded header automatically.
 
 ### HackerNews always returns 0 stories
 

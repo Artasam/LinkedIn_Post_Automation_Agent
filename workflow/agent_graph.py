@@ -152,8 +152,7 @@ def generate_image_node(state: AgentState) -> AgentState:
     try:
         from tools.image_tool import generate_image
         topic_title = state["best_draft"]["topic"].get("title", "AI trends")
-        topic_summary = state["best_draft"]["topic"].get("summary", "")
-        image_path  = generate_image(topic_title, topic_summary)
+        image_path  = generate_image(topic_title)
         state["image_path"] = image_path
         logger.info("Image generated at: %s", image_path)
     except ImportError:
