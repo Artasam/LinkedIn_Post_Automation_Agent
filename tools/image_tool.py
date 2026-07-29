@@ -349,7 +349,7 @@ def _refine_topic_for_image(topic_title: str) -> str:
         
         llm = ChatGroq(
             api_key=settings.GROQ_API_KEY,
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             temperature=0.7,
             max_tokens=150,
         )
@@ -646,16 +646,17 @@ def _generate_svg(topic_title: str) -> Optional[str]:
 # PUBLIC API
 # ══════════════════════════════════════════════════════════════════════════════
 
-def generate_image(topic_title: str) -> Optional[str]:
+def generate_image(topic_title: str, topic_summary: str = "") -> Optional[str]:
     """
     Fetch or generate a professional LinkedIn header image for the given topic.
 
-    Engine waterfall (updated 2026-07-27):
-      0. Gemini 2.5 Flash Image — FREE via AI Studio, AI infographics, needs GEMINI_API_KEY
-      1. Pollinations AI        — FREE, AI generated pictures, no key needed
-      2. Pexels API             — FREE, professional photos, needs PEXELS_API_KEY
-      3. Unsplash API           — FREE, curated photos, needs UNSPLASH_ACCESS_KEY
-      4. SVG Engine             — FREE, always works, no key needed
+    Engine waterfall (updated):
+      0. Dynamic Infographic    - HTML templates / Mermaid via Groq LLM (openai/gpt-oss-120b)
+      1. Gemini 2.5 Flash Image — FREE via AI Studio, AI infographics, needs GEMINI_API_KEY
+      2. Pollinations AI        — FREE, AI generated pictures, no key needed
+      3. Pexels API             — FREE, professional photos, needs PEXELS_API_KEY
+      4. Unsplash API           — FREE, curated photos, needs UNSPLASH_ACCESS_KEY
+      5. SVG Engine             — FREE, always works, no key needed
 
     Returns:
         Absolute path to the image file (jpg or svg), or None if all fail.
@@ -663,39 +664,52 @@ def generate_image(topic_title: str) -> Optional[str]:
     """
     logger.info("Image generation started for topic: '%s'", topic_title[:80])
 
-    # Engine 0: Gemini Flash Image
-    logger.info("Trying Engine 0: Gemini 2.5 Flash Image (FREE AI infographics)…")
+    # Engine 0: Dynamic Infographics (Mermaid / HTML templates)
+    logger.info("Trying Engine 0: Dynamic Infographic (Mermaid/HTML)…")
+    try:
+        from tools.infographic_engine import generate_dynamic_infographic
+        result = generate_dynamic_infographic(topic_title, topic_summary)
+        if result:
+            logger.info("✅ Engine 0 (Dynamic Infographic) succeeded.")
+            return result
+    except ImportError:
+        logger.info("infographic_engine not available — skipping Engine 0.")
+    except Exception as exc:
+        logger.warning("Engine 0 failed: %s", exc)
+
+    # Engine 1: Gemini Flash Image
+    logger.info("Trying Engine 1: Gemini 2.5 Flash Image (FREE AI infographics)…")
     result = _fetch_gemini_imagen(topic_title)
     if result:
-        logger.info("✅ Engine 0 (Gemini) succeeded.")
+        logger.info("✅ Engine 1 (Gemini) succeeded.")
         return result
 
-    # Engine 1: Pollinations AI
-    logger.info("Trying Engine 1: Pollinations AI (FREE AI generated photos)…")
+    # Engine 2: Pollinations AI
+    logger.info("Trying Engine 2: Pollinations AI (FREE AI generated photos)…")
     result = _fetch_pollinations(topic_title)
     if result:
-        logger.info("✅ Engine 1 (Pollinations AI) succeeded.")
+        logger.info("✅ Engine 2 (Pollinations AI) succeeded.")
         return result
 
-    # Engine 2: Pexels
-    logger.info("Trying Engine 2: Pexels API (FREE professional photos)…")
+    # Engine 3: Pexels
+    logger.info("Trying Engine 3: Pexels API (FREE professional photos)…")
     result = _fetch_pexels(topic_title)
     if result:
-        logger.info("✅ Engine 2 (Pexels) succeeded.")
+        logger.info("✅ Engine 3 (Pexels) succeeded.")
         return result
 
-    # Engine 3: Unsplash
-    logger.info("Trying Engine 3: Unsplash API (FREE curated photos)…")
+    # Engine 4: Unsplash
+    logger.info("Trying Engine 4: Unsplash API (FREE curated photos)…")
     result = _fetch_unsplash(topic_title)
     if result:
-        logger.info("✅ Engine 3 (Unsplash) succeeded.")
+        logger.info("✅ Engine 4 (Unsplash) succeeded.")
         return result
 
-    # Engine 4: SVG — always works
-    logger.info("Trying Engine 4: SVG Generator (no network required)…")
+    # Engine 5: SVG — always works
+    logger.info("Trying Engine 5: SVG Generator (no network required)…")
     result = _generate_svg(topic_title)
     if result:
-        logger.info("✅ Engine 4 (SVG) succeeded.")
+        logger.info("✅ Engine 5 (SVG) succeeded.")
         return result
 
     # Should never reach here since SVG always works

@@ -13,3 +13,5 @@ python-dotenv
 
 Pillow
 google-genai
+html2image
+pydantic
