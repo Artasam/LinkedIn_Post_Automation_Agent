@@ -1,11 +1,5 @@
 [
   {
-    "title": "What Happens When You Train AI Models with Noisy Data?",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7475048446631034880",
-    "published_at": "2026-06-23T04:53:49.683979+00:00"
-  },
-  {
     "title": "What's Next for Text-to-Image Generation",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7475413560311877632",
@@ -178,5 +172,11 @@
     "source": "Amazon.com",
     "post_id": "urn:li:share:7488375223369650176",
     "published_at": "2026-07-29T23:29:40.909975+00:00"
+  },
+  {
+    "title": "Can AI Really Automate Its Own Research?",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7488440781956038657",
+    "published_at": "2026-07-30T03:50:11.661261+00:00"
   }
 ]
