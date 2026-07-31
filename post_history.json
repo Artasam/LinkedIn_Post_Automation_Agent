@@ -1,11 +1,5 @@
 [
   {
-    "title": "What's Next for Text-to-Image Generation",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7475413560311877632",
-    "published_at": "2026-06-24T05:04:39.850763+00:00"
-  },
-  {
     "title": "What Your AI Models Aren't Telling You: The Hidden Costs of AI-Powered Coding",
     "source": "ComputerWeekly.com",
     "post_id": "urn:li:share:7475773964510961664",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7488440781956038657",
     "published_at": "2026-07-30T03:50:11.661261+00:00"
+  },
+  {
+    "title": "How to Make Your Language Models More Transparent and Accountable",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7488830800545787904",
+    "published_at": "2026-07-31T05:39:59.375942+00:00"
   }
 ]
