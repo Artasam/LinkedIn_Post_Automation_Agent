@@ -1,11 +1,5 @@
 [
   {
-    "title": "What Your AI Models Aren't Telling You: The Hidden Costs of AI-Powered Coding",
-    "source": "ComputerWeekly.com",
-    "post_id": "urn:li:share:7475773964510961664",
-    "published_at": "2026-06-25T04:56:47.065403+00:00"
-  },
-  {
     "title": "Are Large Language Models Always the Best Choice for Marketing Tasks?",
     "source": "AdExchanger",
     "post_id": "urn:li:share:7476156155887734784",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7488830800545787904",
     "published_at": "2026-07-31T05:39:59.375942+00:00"
+  },
+  {
+    "title": "What Happens When You Train Large Language Models on Limited Hardware",
+    "source": "Github.com",
+    "post_id": "urn:li:share:7489899892253835264",
+    "published_at": "2026-08-03T04:28:10.222263+00:00"
   }
 ]
