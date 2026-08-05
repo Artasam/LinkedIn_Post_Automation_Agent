@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Supercharge Your Local Search with AI",
-    "source": "Github.io",
-    "post_id": "urn:li:share:7477231686615891968",
-    "published_at": "2026-06-29T05:29:15.137177+00:00"
-  },
-  {
     "title": "How AI Can Speed Up Your Code Reviews",
     "source": "C-sharpcorner.com",
     "post_id": "urn:li:share:7477585846456672257",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7490254417045176320",
     "published_at": "2026-08-04T03:56:55.992798+00:00"
+  },
+  {
+    "title": "How to Get More Out of Your Large Language Models with Better Inference Regimes",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7490620931099471872",
+    "published_at": "2026-08-05T04:13:19.381372+00:00"
   }
 ]
