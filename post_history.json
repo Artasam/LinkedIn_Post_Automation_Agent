@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Reduce Errors When Using Large Language Models with Tables",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7477955324117970944",
-    "published_at": "2026-07-01T05:24:43.697625+00:00"
-  },
-  {
     "title": "Can AI Really Assemble Furniture on Its Own?",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7478309592775651328",
@@ -178,5 +172,11 @@
     "source": "GitHub",
     "post_id": "urn:li:share:7490979372661682176",
     "published_at": "2026-08-06T03:57:38.737596+00:00"
+  },
+  {
+    "title": "How to Optimize AI Agent Decision-Making with Better Governance Models",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7491349463928864768",
+    "published_at": "2026-08-07T04:28:15.108511+00:00"
   }
 ]
