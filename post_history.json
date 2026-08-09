@@ -1,11 +1,5 @@
 [
   {
-    "title": "Can AI Really Assemble Furniture on Its Own?",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7478309592775651328",
-    "published_at": "2026-07-02T04:52:27.634105+00:00"
-  },
-  {
     "title": "How to Monitor AI Models for Unsafe Outputs in Real-Time",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7478688422799347712",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7491349463928864768",
     "published_at": "2026-08-07T04:28:15.108511+00:00"
+  },
+  {
+    "title": "How Tool Use Can Supercharge Your Language Models",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7492179637884690432",
+    "published_at": "2026-08-09T11:27:04.380371+00:00"
   }
 ]
