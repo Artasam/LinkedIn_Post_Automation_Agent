@@ -116,13 +116,13 @@ jobs:
           GEMINI_API_KEY:        ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY:        ${{ secrets.PEXELS_API_KEY }}
           UNSPLASH_ACCESS_KEY:   ${{ secrets.UNSPLASH_ACCESS_KEY }}
-          ENABLE_IMAGE_GENERATION: "true"
+          ENABLE_IMAGE_GENERATION: "false"
 
           # News sources
           NEWS_API_KEY:          ${{ secrets.NEWS_API_KEY }}
 
           # LLM settings
-          GROQ_MODEL:            "llama-3.3-70b-versatile"
+          GROQ_MODEL:            "openai/gpt-oss-120b"
           GROQ_TEMPERATURE:      "0.7"
           GROQ_MAX_TOKENS:       "700"
           MULTI_TOPIC_DRAFTS:    "1"
