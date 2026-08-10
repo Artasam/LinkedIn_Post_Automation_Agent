@@ -1,11 +1,5 @@
 [
   {
-    "title": "How to Monitor AI Models for Unsafe Outputs in Real-Time",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7478688422799347712",
-    "published_at": "2026-07-03T05:57:47.761744+00:00"
-  },
-  {
     "title": "How to Keep Your LLMs from Generating Unsafe Outputs in Production",
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7479113026470567936",
@@ -178,5 +172,11 @@
     "source": "ArXiv Research",
     "post_id": "urn:li:share:7492179637884690432",
     "published_at": "2026-08-09T11:27:04.380371+00:00"
+  },
+  {
+    "title": "How to Balance Quality and Creativity in Large Language Models",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7492416972698214400",
+    "published_at": "2026-08-10T03:10:09.464161+00:00"
   }
 ]
