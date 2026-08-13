@@ -1,11 +1,5 @@
 [
   {
-    "title": "How AI Can Improve Cancer Treatment Decisions",
-    "source": "ArXiv Research",
-    "post_id": "urn:li:share:7480474931693248512",
-    "published_at": "2026-07-08T04:16:44.966268+00:00"
-  },
-  {
     "title": "Simplify Your LLM Workflows with Token Optimization",
     "source": "Pypi.org",
     "post_id": "urn:li:share:7480844865661100033",
@@ -178,5 +172,11 @@
     "source": "",
     "post_id": "urn:li:share:7493145263612723200",
     "published_at": "2026-08-12T03:24:07.022420+00:00"
+  },
+  {
+    "title": "How Open\u2011Source Model Customization Is Scaling With $1.1B Funding",
+    "source": "SiliconANGLE News",
+    "post_id": "urn:li:share:7493507079953879041",
+    "published_at": "2026-08-13T03:21:50.746592+00:00"
   }
 ]
