@@ -1,11 +1,5 @@
 [
   {
-    "title": "Simplify Your LLM Workflows with Token Optimization",
-    "source": "Pypi.org",
-    "post_id": "urn:li:share:7480844865661100033",
-    "published_at": "2026-07-09T04:46:43.972825+00:00"
-  },
-  {
     "title": "What You Need to Know About OpenAI's New GPT-Live Voice Models",
     "source": "SiliconANGLE News",
     "post_id": "urn:li:share:7481227970779627521",
@@ -178,5 +172,11 @@
     "source": "SiliconANGLE News",
     "post_id": "urn:li:share:7493507079953879041",
     "published_at": "2026-08-13T03:21:50.746592+00:00"
+  },
+  {
+    "title": "[ArXiv] LittleLearner: Language Models Under Pedagogically Controlled Knowledge Exposure",
+    "source": "ArXiv Research",
+    "post_id": "urn:li:share:7493882068725137410",
+    "published_at": "2026-08-14T04:11:55.051493+00:00"
   }
 ]
